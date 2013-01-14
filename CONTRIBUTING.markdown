@@ -8,3 +8,11 @@ As you have ideas for features you want to implement, follow the contribution st
 If you have questions on how to contribute or code your contributions, just ask for help in our forums or contact to one member of the community.
 
 Here you can find more information on how to contribute to all LSUG projects: https://www.liferay.com/community/user-groups/spain/welcome/-/wiki/Main/%23LSUG+Projects
+
+## Steps to contribute
+
+1. Fork it!
+2. Create your feature branch: `git checkout -b my-new-feature`
+3. Commit your changesL `git commit -am 'Add some feature'`
+4. Push to the branch: `git push origin my-new-feature`
+5. Submit a pull request :D
