@@ -3,7 +3,8 @@
 
 <display>
 	<category name="hidden">
+		<portlet id="my-quota-portlet" />
 		<portlet id="server-quota-portlet" />
-		<portlet id="site-quota-portlet" />
+		<portlet id="site-quota-portlet" />		
 	</category>
 </display>
