@@ -21,7 +21,7 @@
         <resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
 			<title>Server Quota</title>
-			<short-title>Quota Control</short-title>
+			<short-title>Server Quota</short-title>
 			<keywords>Server Quota</keywords>
 		</portlet-info>
 		<security-role-ref>
@@ -58,7 +58,7 @@
 		<portlet-info>
 			<title>Site Quota</title>
 			<short-title>Site Quota</short-title>
-			<keywords>Quota Control</keywords>
+			<keywords>Site Quota</keywords>
 		</portlet-info>
 		<security-role-ref>
 			<role-name>administrator</role-name>
