@@ -1,3 +1,16 @@
+/**
+ * Copyright (c) 2013 Liferay Spain User Group All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
 
 package org.lsug.quota;
 
@@ -5,16 +18,10 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
 
-import org.lsug.quota.model.Quota;
-import org.lsug.quota.service.QuotaLocalServiceUtil;
+import org.lsug.quota.util.QuotaUtil;
 
-import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.model.Company;
-import com.liferay.portal.model.Group;
-import com.liferay.portal.service.CompanyLocalServiceUtil;
-import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalService;
@@ -39,7 +46,7 @@ public class QuotaListenerDLFileEntryLocalService
 		ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		if (!hasQuota(groupId, userId, size))
+		if (!QuotaUtil.hasQuota(groupId, userId, size))
 			throw new QuotaExceededException();
 
 		DLFileEntry dlFileEntry =
@@ -48,44 +55,9 @@ public class QuotaListenerDLFileEntryLocalService
 				mimeType, title, description, changeLog, fileEntryTypeId,
 				fieldsMap, file, is, size, serviceContext);
 
-		// TODO: Move to QuotaUtil.
-		decreaseQuota(groupId, userId, size);
+		QuotaUtil.decreaseQuota(groupId, userId, size);
 
 		return dlFileEntry;
-	}
-
-	private void decreaseQuota(long groupId, long userId, long size)
-		throws PortalException, SystemException, NoSuchQuotaException,
-		QuotaExceededException {
-
-		final Group group = GroupLocalServiceUtil.getGroup(groupId);
-		final Company company =
-			CompanyLocalServiceUtil.getCompany(group.getCompanyId());
-
-		QuotaLocalServiceUtil.decrementQuota(
-			PortalUtil.getClassNameId(Group.class), group.getClassPK(), size);
-
-		QuotaLocalServiceUtil.decrementQuota(
-			PortalUtil.getClassNameId(Company.class), company.getCompanyId(),
-			size);
-	}
-
-	private void increaseQuota(long groupId, long userId, long size) throws PortalException, SystemException {
-		final Group group = GroupLocalServiceUtil.getGroup(groupId);
-		final Company company =
-			CompanyLocalServiceUtil.getCompany(group.getCompanyId());
-
-		QuotaLocalServiceUtil.decrementQuota(
-			PortalUtil.getClassNameId(Group.class), group.getClassPK(), size);
-
-		QuotaLocalServiceUtil.decrementQuota(
-			PortalUtil.getClassNameId(Company.class), company.getCompanyId(),
-			size);
-	}
-	
-	private boolean hasQuota(long groupId, long userId, long size) {
-
-		return true;
 	}
 
 	protected void deleteFileEntry(DLFileEntry dlFileEntry)
@@ -93,7 +65,7 @@ public class QuotaListenerDLFileEntryLocalService
 
 		super.deleteDLFileEntry(dlFileEntry);
 
-		increaseQuota(dlFileEntry.getGroupId(), dlFileEntry.getUserId(), dlFileEntry.getSize());
+		QuotaUtil.increaseQuota(dlFileEntry.getGroupId(), dlFileEntry.getUserId(), dlFileEntry.getSize());
 	}
 
 	public void deleteFileEntry(long fileEntryId)
@@ -103,7 +75,7 @@ public class QuotaListenerDLFileEntryLocalService
 
 		super.deleteDLFileEntry(fileEntryId);
 
-		increaseQuota(dlFileEntry.getGroupId(), dlFileEntry.getUserId(), dlFileEntry.getSize());
+		QuotaUtil.increaseQuota(dlFileEntry.getGroupId(), dlFileEntry.getUserId(), dlFileEntry.getSize());
 	}
 
 	public void deleteFileEntry(long userId, long fileEntryId)
@@ -113,7 +85,7 @@ public class QuotaListenerDLFileEntryLocalService
 
 		super.deleteFileEntry(userId, fileEntryId);
 
-		increaseQuota(dlFileEntry.getGroupId(), dlFileEntry.getUserId(), dlFileEntry.getSize());
+		QuotaUtil.increaseQuota(dlFileEntry.getGroupId(), dlFileEntry.getUserId(), dlFileEntry.getSize());
 	}
 
 	public DLFileEntry updateFileEntry(
@@ -126,9 +98,9 @@ public class QuotaListenerDLFileEntryLocalService
 
 		DLFileEntry fileEntry = DLFileEntryLocalServiceUtil.getFileEntry(fileEntryId);
 		long groupId = fileEntry.getGroupId();
-		increaseQuota(groupId, userId, size);
+		QuotaUtil.increaseQuota(groupId, userId, size);
 		
-		if (!hasQuota(groupId, userId, size))
+		if (!QuotaUtil.hasQuota(groupId, userId, size))
 			throw new QuotaExceededException();
 
 		DLFileEntry dlFileEntry =
@@ -137,7 +109,7 @@ public class QuotaListenerDLFileEntryLocalService
 				description, changeLog, majorVersion, fileEntryTypeId,
 				fieldsMap, file, is, size, serviceContext);
 
-		decreaseQuota(groupId, userId, dlFileEntry.getSize());
+		QuotaUtil.decreaseQuota(groupId, userId, dlFileEntry.getSize());
 
 		return dlFileEntry;
 	}

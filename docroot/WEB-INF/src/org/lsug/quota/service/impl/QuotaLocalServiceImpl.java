@@ -29,6 +29,20 @@ import com.liferay.portal.kernel.exception.SystemException;
  * the propagated JAAS credentials because this service can only be accessed
  * from within the same VM. </p>
  * 
+=======
+import org.lsug.quota.service.base.QuotaLocalServiceBaseImpl;
+
+/**
+ * The implementation of the quota local service.
+ *
+ * <p>
+ * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.lsug.quota.service.QuotaLocalService} interface.
+ *
+ * <p>
+ * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
+ * </p>
+ *
+>>>>>>> 05ae214d56dfa801e384416c8f6721ea1045fafa
  * @author Brian Wing Shun Chan
  * @see org.lsug.quota.service.base.QuotaLocalServiceBaseImpl
  * @see org.lsug.quota.service.QuotaLocalServiceUtil
@@ -53,7 +67,7 @@ public class QuotaLocalServiceImpl extends QuotaLocalServiceBaseImpl {
 		final long classNameId, final long classPK, final long fileSize)
 		throws NoSuchQuotaException, SystemException {
 
-		Quota quota = getByClassNameIdClassPK(classNameId, classPK);
+		Quota quota = getQuotaByClassNameIdClassPK(classNameId, classPK);
 
 		quota.setQuotaUsed(quota.getQuotaUsed() + fileSize);
 

@@ -31,4 +31,5 @@ public interface Quota extends QuotaModel, PersistedModel {
 	 *
 	 * Never modify this interface directly. Add methods to {@link org.lsug.quota.model.impl.QuotaImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
+	public boolean hasFreeMB(long mb);
 }
