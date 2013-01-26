@@ -81,7 +81,7 @@
 		</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/my-quota-portlet/view.jsp</value>
+			<value>/html/my-quota/view.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
