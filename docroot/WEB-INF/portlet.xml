@@ -20,9 +20,9 @@
 		<supported-locale>gl</supported-locale>
         <resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
-			<title>Server Quota Portlet</title>
-			<short-title>Server Quota Portlet</short-title>
-			<keywords>Server Quota Portlet</keywords>
+			<title>Server Quota</title>
+			<short-title>Quota Control</short-title>
+			<keywords>Server Quota</keywords>
 		</portlet-info>
 		<security-role-ref>
 			<role-name>administrator</role-name>
@@ -56,9 +56,9 @@
 		<supported-locale>gl</supported-locale>
         <resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
-			<title>Site Quota Portlet</title>
-			<short-title>Site Quota Portlet</short-title>
-			<keywords>Site Quota Portlet</keywords>
+			<title>Site Quota</title>
+			<short-title>Site Quota</short-title>
+			<keywords>Quota Control</keywords>
 		</portlet-info>
 		<security-role-ref>
 			<role-name>administrator</role-name>
