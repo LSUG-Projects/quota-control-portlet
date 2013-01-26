@@ -5,12 +5,15 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalService;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceWrapper;
 import com.liferay.portlet.dynamicdatamapping.storage.Fields;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
+
+import org.lsug.quota.util.QuotaUtil;
 
 public class QuotaListenerDLFileEntryLocalService 
 	extends DLFileEntryLocalServiceWrapper {

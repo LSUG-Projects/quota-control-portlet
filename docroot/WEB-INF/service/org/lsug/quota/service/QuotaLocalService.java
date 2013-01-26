@@ -240,4 +240,31 @@ public interface QuotaLocalService extends BaseLocalService,
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public org.lsug.quota.model.Quota getQuotaByClassNameIdClassPK(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException;
+
+	public org.lsug.quota.model.Quota updateQuota(long classNameId,
+		long classPK, long fileSize)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException;
+
+	public org.lsug.quota.model.Quota updateQuota(long quotaId,
+		long classNameId, long classPK, int quotaAlert, long quotaAssigned,
+		long quotaUsed)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException;
+
+	public org.lsug.quota.model.Quota decrementQuota(long classNameId,
+		long classPK, long fileSize)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException;
+
+	public org.lsug.quota.model.Quota incrementQuota(long classNameId,
+		long classPK, long fileSize)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException;
 }

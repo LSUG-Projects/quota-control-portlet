@@ -14,6 +14,12 @@
 
 package org.lsug.quota.service.impl;
 
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ParamUtil;
+
+import org.lsug.quota.NoSuchQuotaException;
+import org.lsug.quota.model.Quota;
+import org.lsug.quota.service.QuotaLocalServiceUtil;
 import org.lsug.quota.service.base.QuotaLocalServiceBaseImpl;
 
 /**
@@ -31,9 +37,56 @@ import org.lsug.quota.service.base.QuotaLocalServiceBaseImpl;
  * @see org.lsug.quota.service.QuotaLocalServiceUtil
  */
 public class QuotaLocalServiceImpl extends QuotaLocalServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this interface directly. Always use {@link org.lsug.quota.service.QuotaLocalServiceUtil} to access the quota local service.
-	 */
+
+	public Quota getQuotaByClassNameIdClassPK(
+			final long classNameId, final long classPK)
+		throws NoSuchQuotaException, SystemException {
+
+		return getQuotaPersistence().findByClassNameIdClassPK(
+			classNameId, classPK);
+	}
+
+	public Quota updateQuota(
+			final long classNameId, final long classPK, final long fileSize)
+		throws NoSuchQuotaException, SystemException {
+
+		Quota quota = getQuotaByClassNameIdClassPK(classNameId, classPK);
+
+		quota.setQuotaUsed(quota.getQuotaUsed() + fileSize);
+
+		return updateQuota(quota);
+	}
+	
+	public Quota updateQuota(
+			long quotaId, long classNameId, long classPK, int quotaAlert, 
+			long quotaAssigned, long quotaUsed) 
+		throws NoSuchQuotaException, SystemException {
+		
+		return updateQuota(
+			quotaId, classNameId, classPK, quotaAlert, quotaAssigned, 
+			quotaUsed);
+	}
+
+	public Quota decrementQuota(
+			final long classNameId, final long classPK, final long fileSize)
+		throws NoSuchQuotaException, SystemException {
+
+		if (fileSize >= 0)
+			throw new IllegalArgumentException(
+				"Cannot increment a quota by a negative increment.");
+
+		return updateQuota(classNameId, classPK, -fileSize);
+	}
+
+	public Quota incrementQuota(
+			final long classNameId, final long classPK, final long fileSize)
+		throws NoSuchQuotaException, SystemException {
+
+		if (fileSize < 0)
+			throw new IllegalArgumentException(
+				"Cannot decrement a quota by a positive decrement");
+
+		return updateQuota(classNameId, classPK, fileSize);
+	}
+	
 }
