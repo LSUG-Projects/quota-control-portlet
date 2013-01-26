@@ -5,6 +5,8 @@
 	<portlet>
 		<portlet-name>server-quota-portlet</portlet-name>
 		<icon>/icon.png</icon>
+		<control-panel-entry-category>server</control-panel-entry-category>
+		<control-panel-entry-weight>2.0</control-panel-entry-weight>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
@@ -13,6 +15,8 @@
 	<portlet>
 		<portlet-name>site-quota-portlet</portlet-name>
 		<icon>/icon.png</icon>
+		<control-panel-entry-category>portal</control-panel-entry-category>
+		<control-panel-entry-weight>2.0</control-panel-entry-weight>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
