@@ -4,7 +4,7 @@
 <liferay-portlet-app>
 	<portlet>
 		<portlet-name>server-quota-portlet</portlet-name>
-		<icon>/icon.png</icon>
+		<icon>/html/server-quota/icon.png</icon>
 		<control-panel-entry-category>server</control-panel-entry-category>
 		<control-panel-entry-weight>2.0</control-panel-entry-weight>
 		<instanceable>false</instanceable>
@@ -14,7 +14,7 @@
 	</portlet>
 	<portlet>
 		<portlet-name>site-quota-portlet</portlet-name>
-		<icon>/icon.png</icon>
+		<icon>/html/site-quota/icon.png</icon>
 		<control-panel-entry-category>portal</control-panel-entry-category>
 		<control-panel-entry-weight>2.0</control-panel-entry-weight>
 		<instanceable>false</instanceable>
@@ -24,7 +24,7 @@
 	</portlet>
 	<portlet>
 		<portlet-name>my-quota-portlet</portlet-name>
-		<icon>/icon.png</icon>
+		<icon>/html/my-quota/icon.png</icon>
 		<control-panel-entry-category>my</control-panel-entry-category>
 		<control-panel-entry-weight>3.0</control-panel-entry-weight>
 		<instanceable>false</instanceable>
