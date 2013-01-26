@@ -269,6 +269,34 @@ public class QuotaLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static org.lsug.quota.model.Quota getQuotaByClassNameIdClassPK(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException {
+		return getService().getQuotaByClassNameIdClassPK(classNameId, classPK);
+	}
+
+	public static org.lsug.quota.model.Quota updateQuota(long classNameId,
+		long classPK, long fileSize)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException {
+		return getService().updateQuota(classNameId, classPK, fileSize);
+	}
+
+	public static org.lsug.quota.model.Quota decrementQuota(long classNameId,
+		long classPK, long fileSize)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException {
+		return getService().decrementQuota(classNameId, classPK, fileSize);
+	}
+
+	public static org.lsug.quota.model.Quota incrementQuota(long classNameId,
+		long classPK, long fileSize)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException {
+		return getService().incrementQuota(classNameId, classPK, fileSize);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

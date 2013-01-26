@@ -260,6 +260,35 @@ public class QuotaLocalServiceWrapper implements QuotaLocalService,
 		return _quotaLocalService.invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public org.lsug.quota.model.Quota getQuotaByClassNameIdClassPK(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException {
+		return _quotaLocalService.getQuotaByClassNameIdClassPK(classNameId,
+			classPK);
+	}
+
+	public org.lsug.quota.model.Quota updateQuota(long classNameId,
+		long classPK, long fileSize)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException {
+		return _quotaLocalService.updateQuota(classNameId, classPK, fileSize);
+	}
+
+	public org.lsug.quota.model.Quota decrementQuota(long classNameId,
+		long classPK, long fileSize)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException {
+		return _quotaLocalService.decrementQuota(classNameId, classPK, fileSize);
+	}
+
+	public org.lsug.quota.model.Quota incrementQuota(long classNameId,
+		long classPK, long fileSize)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException {
+		return _quotaLocalService.incrementQuota(classNameId, classPK, fileSize);
+	}
+
 	/**
 	 * @deprecated Renamed to {@link #getWrappedService}
 	 */
