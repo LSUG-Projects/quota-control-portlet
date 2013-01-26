@@ -105,11 +105,11 @@ public class QuotaSoap implements Serializable {
 		_classNameId = classNameId;
 	}
 
-	public String getClassPK() {
+	public long getClassPK() {
 		return _classPK;
 	}
 
-	public void setClassPK(String classPK) {
+	public void setClassPK(long classPK) {
 		_classPK = classPK;
 	}
 
@@ -147,7 +147,7 @@ public class QuotaSoap implements Serializable {
 
 	private long _quotaId;
 	private long _classNameId;
-	private String _classPK;
+	private long _classPK;
 	private long _quotaAssigned;
 	private long _quotaUsed;
 	private int _quotaStatus;

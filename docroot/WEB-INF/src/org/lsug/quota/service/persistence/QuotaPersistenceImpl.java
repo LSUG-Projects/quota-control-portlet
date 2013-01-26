@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderPath;
 import com.liferay.portal.kernel.dao.orm.Query;
+import com.liferay.portal.kernel.dao.orm.QueryPos;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -32,6 +33,7 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
@@ -75,6 +77,17 @@ public class QuotaPersistenceImpl extends BasePersistenceImpl<Quota>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_FETCH_BY_CLASSNAMEIDCLASSPK = new FinderPath(QuotaModelImpl.ENTITY_CACHE_ENABLED,
+			QuotaModelImpl.FINDER_CACHE_ENABLED, QuotaImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByClassNameIdClassPK",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			QuotaModelImpl.CLASSNAMEID_COLUMN_BITMASK |
+			QuotaModelImpl.CLASSPK_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_CLASSNAMEIDCLASSPK = new FinderPath(QuotaModelImpl.ENTITY_CACHE_ENABLED,
+			QuotaModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByClassNameIdClassPK",
+			new String[] { Long.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(QuotaModelImpl.ENTITY_CACHE_ENABLED,
 			QuotaModelImpl.FINDER_CACHE_ENABLED, QuotaImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
@@ -93,6 +106,12 @@ public class QuotaPersistenceImpl extends BasePersistenceImpl<Quota>
 	public void cacheResult(Quota quota) {
 		EntityCacheUtil.putResult(QuotaModelImpl.ENTITY_CACHE_ENABLED,
 			QuotaImpl.class, quota.getPrimaryKey(), quota);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CLASSNAMEIDCLASSPK,
+			new Object[] {
+				Long.valueOf(quota.getClassNameId()),
+				Long.valueOf(quota.getClassPK())
+			}, quota);
 
 		quota.resetOriginalValues();
 	}
@@ -148,6 +167,8 @@ public class QuotaPersistenceImpl extends BasePersistenceImpl<Quota>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(quota);
 	}
 
 	@Override
@@ -158,7 +179,17 @@ public class QuotaPersistenceImpl extends BasePersistenceImpl<Quota>
 		for (Quota quota : quotas) {
 			EntityCacheUtil.removeResult(QuotaModelImpl.ENTITY_CACHE_ENABLED,
 				QuotaImpl.class, quota.getPrimaryKey());
+
+			clearUniqueFindersCache(quota);
 		}
+	}
+
+	protected void clearUniqueFindersCache(Quota quota) {
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CLASSNAMEIDCLASSPK,
+			new Object[] {
+				Long.valueOf(quota.getClassNameId()),
+				Long.valueOf(quota.getClassPK())
+			});
 	}
 
 	/**
@@ -259,6 +290,8 @@ public class QuotaPersistenceImpl extends BasePersistenceImpl<Quota>
 
 		boolean isNew = quota.isNew();
 
+		QuotaModelImpl quotaModelImpl = (QuotaModelImpl)quota;
+
 		Session session = null;
 
 		try {
@@ -277,12 +310,41 @@ public class QuotaPersistenceImpl extends BasePersistenceImpl<Quota>
 
 		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 
-		if (isNew) {
+		if (isNew || !QuotaModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 		}
 
 		EntityCacheUtil.putResult(QuotaModelImpl.ENTITY_CACHE_ENABLED,
 			QuotaImpl.class, quota.getPrimaryKey(), quota);
+
+		if (isNew) {
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CLASSNAMEIDCLASSPK,
+				new Object[] {
+					Long.valueOf(quota.getClassNameId()),
+					Long.valueOf(quota.getClassPK())
+				}, quota);
+		}
+		else {
+			if ((quotaModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_CLASSNAMEIDCLASSPK.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(quotaModelImpl.getOriginalClassNameId()),
+						Long.valueOf(quotaModelImpl.getOriginalClassPK())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CLASSNAMEIDCLASSPK,
+					args);
+
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CLASSNAMEIDCLASSPK,
+					args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CLASSNAMEIDCLASSPK,
+					new Object[] {
+						Long.valueOf(quota.getClassNameId()),
+						Long.valueOf(quota.getClassPK())
+					}, quota);
+			}
+		}
 
 		return quota;
 	}
@@ -407,6 +469,154 @@ public class QuotaPersistenceImpl extends BasePersistenceImpl<Quota>
 	}
 
 	/**
+	 * Returns the quota where classNameId = &#63; and classPK = &#63; or throws a {@link org.lsug.quota.NoSuchQuotaException} if it could not be found.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the matching quota
+	 * @throws org.lsug.quota.NoSuchQuotaException if a matching quota could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Quota findByClassNameIdClassPK(long classNameId, long classPK)
+		throws NoSuchQuotaException, SystemException {
+		Quota quota = fetchByClassNameIdClassPK(classNameId, classPK);
+
+		if (quota == null) {
+			StringBundler msg = new StringBundler(6);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("classNameId=");
+			msg.append(classNameId);
+
+			msg.append(", classPK=");
+			msg.append(classPK);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			if (_log.isWarnEnabled()) {
+				_log.warn(msg.toString());
+			}
+
+			throw new NoSuchQuotaException(msg.toString());
+		}
+
+		return quota;
+	}
+
+	/**
+	 * Returns the quota where classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the matching quota, or <code>null</code> if a matching quota could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Quota fetchByClassNameIdClassPK(long classNameId, long classPK)
+		throws SystemException {
+		return fetchByClassNameIdClassPK(classNameId, classPK, true);
+	}
+
+	/**
+	 * Returns the quota where classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param retrieveFromCache whether to use the finder cache
+	 * @return the matching quota, or <code>null</code> if a matching quota could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Quota fetchByClassNameIdClassPK(long classNameId, long classPK,
+		boolean retrieveFromCache) throws SystemException {
+		Object[] finderArgs = new Object[] { classNameId, classPK };
+
+		Object result = null;
+
+		if (retrieveFromCache) {
+			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_CLASSNAMEIDCLASSPK,
+					finderArgs, this);
+		}
+
+		if (result instanceof Quota) {
+			Quota quota = (Quota)result;
+
+			if ((classNameId != quota.getClassNameId()) ||
+					(classPK != quota.getClassPK())) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_SELECT_QUOTA_WHERE);
+
+			query.append(_FINDER_COLUMN_CLASSNAMEIDCLASSPK_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_CLASSNAMEIDCLASSPK_CLASSPK_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				List<Quota> list = q.list();
+
+				result = list;
+
+				Quota quota = null;
+
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CLASSNAMEIDCLASSPK,
+						finderArgs, list);
+				}
+				else {
+					quota = list.get(0);
+
+					cacheResult(quota);
+
+					if ((quota.getClassNameId() != classNameId) ||
+							(quota.getClassPK() != classPK)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_CLASSNAMEIDCLASSPK,
+							finderArgs, quota);
+					}
+				}
+
+				return quota;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_CLASSNAMEIDCLASSPK,
+						finderArgs);
+				}
+
+				closeSession(session);
+			}
+		}
+		else {
+			if (result instanceof List<?>) {
+				return null;
+			}
+			else {
+				return (Quota)result;
+			}
+		}
+	}
+
+	/**
 	 * Returns all the quotas.
 	 *
 	 * @return the quotas
@@ -521,6 +731,21 @@ public class QuotaPersistenceImpl extends BasePersistenceImpl<Quota>
 	}
 
 	/**
+	 * Removes the quota where classNameId = &#63; and classPK = &#63; from the database.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the quota that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Quota removeByClassNameIdClassPK(long classNameId, long classPK)
+		throws NoSuchQuotaException, SystemException {
+		Quota quota = findByClassNameIdClassPK(classNameId, classPK);
+
+		return remove(quota);
+	}
+
+	/**
 	 * Removes all the quotas from the database.
 	 *
 	 * @throws SystemException if a system exception occurred
@@ -529,6 +754,65 @@ public class QuotaPersistenceImpl extends BasePersistenceImpl<Quota>
 		for (Quota quota : findAll()) {
 			remove(quota);
 		}
+	}
+
+	/**
+	 * Returns the number of quotas where classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @return the number of matching quotas
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByClassNameIdClassPK(long classNameId, long classPK)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { classNameId, classPK };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_CLASSNAMEIDCLASSPK,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_QUOTA_WHERE);
+
+			query.append(_FINDER_COLUMN_CLASSNAMEIDCLASSPK_CLASSNAMEID_2);
+
+			query.append(_FINDER_COLUMN_CLASSNAMEIDCLASSPK_CLASSPK_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(classNameId);
+
+				qPos.add(classPK);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CLASSNAMEIDCLASSPK,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
 	}
 
 	/**
@@ -607,9 +891,14 @@ public class QuotaPersistenceImpl extends BasePersistenceImpl<Quota>
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_QUOTA = "SELECT quota FROM Quota quota";
+	private static final String _SQL_SELECT_QUOTA_WHERE = "SELECT quota FROM Quota quota WHERE ";
 	private static final String _SQL_COUNT_QUOTA = "SELECT COUNT(quota) FROM Quota quota";
+	private static final String _SQL_COUNT_QUOTA_WHERE = "SELECT COUNT(quota) FROM Quota quota WHERE ";
+	private static final String _FINDER_COLUMN_CLASSNAMEIDCLASSPK_CLASSNAMEID_2 = "quota.classNameId = ? AND ";
+	private static final String _FINDER_COLUMN_CLASSNAMEIDCLASSPK_CLASSPK_2 = "quota.classPK = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "quota.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Quota exists with the primary key ";
+	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Quota exists with the key {";
 	private static final boolean _HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE = GetterUtil.getBoolean(PropsUtil.get(
 				PropsKeys.HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE));
 	private static Log _log = LogFactoryUtil.getLog(QuotaPersistenceImpl.class);

@@ -15,7 +15,6 @@
 package org.lsug.quota.model.impl;
 
 import com.liferay.portal.kernel.util.StringBundler;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.CacheModel;
 
 import org.lsug.quota.model.Quota;
@@ -58,14 +57,7 @@ public class QuotaCacheModel implements CacheModel<Quota>, Serializable {
 
 		quotaImpl.setQuotaId(quotaId);
 		quotaImpl.setClassNameId(classNameId);
-
-		if (classPK == null) {
-			quotaImpl.setClassPK(StringPool.BLANK);
-		}
-		else {
-			quotaImpl.setClassPK(classPK);
-		}
-
+		quotaImpl.setClassPK(classPK);
 		quotaImpl.setQuotaAssigned(quotaAssigned);
 		quotaImpl.setQuotaUsed(quotaUsed);
 		quotaImpl.setQuotaStatus(quotaStatus);
@@ -78,7 +70,7 @@ public class QuotaCacheModel implements CacheModel<Quota>, Serializable {
 
 	public long quotaId;
 	public long classNameId;
-	public String classPK;
+	public long classPK;
 	public long quotaAssigned;
 	public long quotaUsed;
 	public int quotaStatus;

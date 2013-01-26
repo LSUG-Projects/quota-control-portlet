@@ -30,6 +30,7 @@ import com.liferay.portal.service.persistence.ResourcePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 
 import org.lsug.quota.model.Quota;
+import org.lsug.quota.service.QuotaLocalService;
 import org.lsug.quota.service.QuotaService;
 import org.lsug.quota.service.persistence.QuotaPersistence;
 
@@ -54,6 +55,24 @@ public abstract class QuotaServiceBaseImpl extends BaseServiceImpl
 	 *
 	 * Never modify or reference this class directly. Always use {@link org.lsug.quota.service.QuotaServiceUtil} to access the quota remote service.
 	 */
+
+	/**
+	 * Returns the quota local service.
+	 *
+	 * @return the quota local service
+	 */
+	public QuotaLocalService getQuotaLocalService() {
+		return quotaLocalService;
+	}
+
+	/**
+	 * Sets the quota local service.
+	 *
+	 * @param quotaLocalService the quota local service
+	 */
+	public void setQuotaLocalService(QuotaLocalService quotaLocalService) {
+		this.quotaLocalService = quotaLocalService;
+	}
 
 	/**
 	 * Returns the quota remote service.
@@ -274,6 +293,8 @@ public abstract class QuotaServiceBaseImpl extends BaseServiceImpl
 		}
 	}
 
+	@BeanReference(type = QuotaLocalService.class)
+	protected QuotaLocalService quotaLocalService;
 	@BeanReference(type = QuotaService.class)
 	protected QuotaService quotaService;
 	@BeanReference(type = QuotaPersistence.class)

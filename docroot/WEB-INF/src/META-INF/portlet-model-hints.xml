@@ -13,7 +13,7 @@
 	<model name="org.lsug.quota.model.Quota">
 		<field name="quotaId" type="long" />
 		<field name="classNameId" type="long" />
-		<field name="classPK" type="String" />
+		<field name="classPK" type="long" />
 		<field name="quotaAssigned" type="long" />
 		<field name="quotaUsed" type="long" />
 		<field name="quotaStatus" type="int" />

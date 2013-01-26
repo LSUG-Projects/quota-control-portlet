@@ -68,7 +68,7 @@ public class QuotaWrapper implements Quota, ModelWrapper<Quota> {
 			setClassNameId(classNameId);
 		}
 
-		String classPK = (String)attributes.get("classPK");
+		Long classPK = (Long)attributes.get("classPK");
 
 		if (classPK != null) {
 			setClassPK(classPK);
@@ -171,7 +171,7 @@ public class QuotaWrapper implements Quota, ModelWrapper<Quota> {
 	*
 	* @return the class p k of this quota
 	*/
-	public java.lang.String getClassPK() {
+	public long getClassPK() {
 		return _quota.getClassPK();
 	}
 
@@ -180,7 +180,7 @@ public class QuotaWrapper implements Quota, ModelWrapper<Quota> {
 	*
 	* @param classPK the class p k of this quota
 	*/
-	public void setClassPK(java.lang.String classPK) {
+	public void setClassPK(long classPK) {
 		_quota.setClassPK(classPK);
 	}
 
@@ -322,6 +322,11 @@ public class QuotaWrapper implements Quota, ModelWrapper<Quota> {
 
 	public java.lang.String toXmlString() {
 		return _quota.toXmlString();
+	}
+
+	public void persist()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_quota.persist();
 	}
 
 	/**

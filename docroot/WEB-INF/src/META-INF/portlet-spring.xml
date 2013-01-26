@@ -3,6 +3,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	<bean id="org.lsug.service.QuotaService" class="org.lsug.service.impl.QuotaServiceImpl" />
 	<bean id="org.lsug.service.persistence.QuotaPersistence" class="org.lsug.service.persistence.QuotaPersistenceImpl" parent="basePersistence" />
+	<bean id="org.lsug.quota.service.QuotaLocalService" class="org.lsug.quota.service.impl.QuotaLocalServiceImpl" />
 	<bean id="org.lsug.quota.service.QuotaService" class="org.lsug.quota.service.impl.QuotaServiceImpl" />
 	<bean id="org.lsug.quota.service.persistence.QuotaPersistence" class="org.lsug.quota.service.persistence.QuotaPersistenceImpl" parent="basePersistence" />
 </beans>

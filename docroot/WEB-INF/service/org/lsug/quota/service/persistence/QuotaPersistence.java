@@ -98,6 +98,45 @@ public interface QuotaPersistence extends BasePersistence<Quota> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Returns the quota where classNameId = &#63; and classPK = &#63; or throws a {@link org.lsug.quota.NoSuchQuotaException} if it could not be found.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the matching quota
+	* @throws org.lsug.quota.NoSuchQuotaException if a matching quota could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.lsug.quota.model.Quota findByClassNameIdClassPK(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException;
+
+	/**
+	* Returns the quota where classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the matching quota, or <code>null</code> if a matching quota could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.lsug.quota.model.Quota fetchByClassNameIdClassPK(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the quota where classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @param retrieveFromCache whether to use the finder cache
+	* @return the matching quota, or <code>null</code> if a matching quota could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.lsug.quota.model.Quota fetchByClassNameIdClassPK(
+		long classNameId, long classPK, boolean retrieveFromCache)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the quotas.
 	*
 	* @return the quotas
@@ -140,11 +179,35 @@ public interface QuotaPersistence extends BasePersistence<Quota> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes the quota where classNameId = &#63; and classPK = &#63; from the database.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the quota that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public org.lsug.quota.model.Quota removeByClassNameIdClassPK(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException;
+
+	/**
 	* Removes all the quotas from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of quotas where classNameId = &#63; and classPK = &#63;.
+	*
+	* @param classNameId the class name ID
+	* @param classPK the class p k
+	* @return the number of matching quotas
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByClassNameIdClassPK(long classNameId, long classPK)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**

@@ -66,13 +66,13 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 	public static final Object[][] TABLE_COLUMNS = {
 			{ "quotaId", Types.BIGINT },
 			{ "classNameId", Types.BIGINT },
-			{ "classPK", Types.VARCHAR },
+			{ "classPK", Types.BIGINT },
 			{ "quotaAssigned", Types.BIGINT },
 			{ "quotaUsed", Types.BIGINT },
 			{ "quotaStatus", Types.INTEGER },
 			{ "quotaAlert", Types.INTEGER }
 		};
-	public static final String TABLE_SQL_CREATE = "create table LSUGQUOTA_Quota (quotaId LONG not null primary key,classNameId LONG,classPK VARCHAR(75) null,quotaAssigned LONG,quotaUsed LONG,quotaStatus INTEGER,quotaAlert INTEGER)";
+	public static final String TABLE_SQL_CREATE = "create table LSUGQUOTA_Quota (quotaId LONG not null primary key,classNameId LONG,classPK LONG,quotaAssigned LONG,quotaUsed LONG,quotaStatus INTEGER,quotaAlert INTEGER)";
 	public static final String TABLE_SQL_DROP = "drop table LSUGQUOTA_Quota";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
@@ -83,7 +83,11 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 	public static final boolean FINDER_CACHE_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.finder.cache.enabled.org.lsug.quota.model.Quota"),
 			true);
-	public static final boolean COLUMN_BITMASK_ENABLED = false;
+	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
+				"value.object.column.bitmask.enabled.org.lsug.quota.model.Quota"),
+			true);
+	public static long CLASSNAMEID_COLUMN_BITMASK = 1L;
+	public static long CLASSPK_COLUMN_BITMASK = 2L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -188,7 +192,7 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 			setClassNameId(classNameId);
 		}
 
-		String classPK = (String)attributes.get("classPK");
+		Long classPK = (Long)attributes.get("classPK");
 
 		if (classPK != null) {
 			setClassPK(classPK);
@@ -252,21 +256,40 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 	}
 
 	public void setClassNameId(long classNameId) {
+		_columnBitmask |= CLASSNAMEID_COLUMN_BITMASK;
+
+		if (!_setOriginalClassNameId) {
+			_setOriginalClassNameId = true;
+
+			_originalClassNameId = _classNameId;
+		}
+
 		_classNameId = classNameId;
 	}
 
-	@JSON
-	public String getClassPK() {
-		if (_classPK == null) {
-			return StringPool.BLANK;
-		}
-		else {
-			return _classPK;
-		}
+	public long getOriginalClassNameId() {
+		return _originalClassNameId;
 	}
 
-	public void setClassPK(String classPK) {
+	@JSON
+	public long getClassPK() {
+		return _classPK;
+	}
+
+	public void setClassPK(long classPK) {
+		_columnBitmask |= CLASSPK_COLUMN_BITMASK;
+
+		if (!_setOriginalClassPK) {
+			_setOriginalClassPK = true;
+
+			_originalClassPK = _classPK;
+		}
+
 		_classPK = classPK;
+	}
+
+	public long getOriginalClassPK() {
+		return _originalClassPK;
 	}
 
 	@JSON
@@ -303,6 +326,10 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 
 	public void setQuotaAlert(int quotaAlert) {
 		_quotaAlert = quotaAlert;
+	}
+
+	public long getColumnBitmask() {
+		return _columnBitmask;
 	}
 
 	@Override
@@ -392,6 +419,17 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 
 	@Override
 	public void resetOriginalValues() {
+		QuotaModelImpl quotaModelImpl = this;
+
+		quotaModelImpl._originalClassNameId = quotaModelImpl._classNameId;
+
+		quotaModelImpl._setOriginalClassNameId = false;
+
+		quotaModelImpl._originalClassPK = quotaModelImpl._classPK;
+
+		quotaModelImpl._setOriginalClassPK = false;
+
+		quotaModelImpl._columnBitmask = 0;
 	}
 
 	@Override
@@ -403,12 +441,6 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 		quotaCacheModel.classNameId = getClassNameId();
 
 		quotaCacheModel.classPK = getClassPK();
-
-		String classPK = quotaCacheModel.classPK;
-
-		if ((classPK != null) && (classPK.length() == 0)) {
-			quotaCacheModel.classPK = null;
-		}
 
 		quotaCacheModel.quotaAssigned = getQuotaAssigned();
 
@@ -491,10 +523,15 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 		};
 	private long _quotaId;
 	private long _classNameId;
-	private String _classPK;
+	private long _originalClassNameId;
+	private boolean _setOriginalClassNameId;
+	private long _classPK;
+	private long _originalClassPK;
+	private boolean _setOriginalClassPK;
 	private long _quotaAssigned;
 	private long _quotaUsed;
 	private int _quotaStatus;
 	private int _quotaAlert;
+	private long _columnBitmask;
 	private Quota _escapedModelProxy;
 }

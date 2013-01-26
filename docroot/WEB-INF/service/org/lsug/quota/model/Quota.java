@@ -14,6 +14,8 @@
 
 package org.lsug.quota.model;
 
+import com.liferay.portal.model.PersistedModel;
+
 /**
  * The extended model interface for the Quota service. Represents a row in the &quot;LSUGQUOTA_Quota&quot; database table, with each column mapped to a property of this class.
  *
@@ -23,7 +25,7 @@ package org.lsug.quota.model;
  * @see org.lsug.quota.model.impl.QuotaModelImpl
  * @generated
  */
-public interface Quota extends QuotaModel {
+public interface Quota extends QuotaModel, PersistedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *

@@ -15,12 +15,15 @@
 package org.lsug.quota.model;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
+import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
+
+import org.lsug.quota.service.QuotaLocalServiceUtil;
 
 import java.io.Serializable;
 
@@ -89,7 +92,7 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 			setClassNameId(classNameId);
 		}
 
-		String classPK = (String)attributes.get("classPK");
+		Long classPK = (Long)attributes.get("classPK");
 
 		if (classPK != null) {
 			setClassPK(classPK);
@@ -154,11 +157,11 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 		_classNameId = classNameId;
 	}
 
-	public String getClassPK() {
+	public long getClassPK() {
 		return _classPK;
 	}
 
-	public void setClassPK(String classPK) {
+	public void setClassPK(long classPK) {
 		_classPK = classPK;
 	}
 
@@ -200,6 +203,15 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 
 	public void setQuotaRemoteModel(BaseModel<?> quotaRemoteModel) {
 		_quotaRemoteModel = quotaRemoteModel;
+	}
+
+	public void persist() throws SystemException {
+		if (this.isNew()) {
+			QuotaLocalServiceUtil.addQuota(this);
+		}
+		else {
+			QuotaLocalServiceUtil.updateQuota(this);
+		}
 	}
 
 	@Override
@@ -333,7 +345,7 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 
 	private long _quotaId;
 	private long _classNameId;
-	private String _classPK;
+	private long _classPK;
 	private long _quotaAssigned;
 	private long _quotaUsed;
 	private int _quotaStatus;

@@ -22,7 +22,7 @@
 			<generator class="assigned" />
 		</id>
 		<property name="classNameId" type="com.liferay.portal.dao.orm.hibernate.LongType" />
-		<property name="classPK" type="com.liferay.portal.dao.orm.hibernate.StringType" />
+		<property name="classPK" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="quotaAssigned" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="quotaUsed" type="com.liferay.portal.dao.orm.hibernate.LongType" />
 		<property name="quotaStatus" type="com.liferay.portal.dao.orm.hibernate.IntegerType" />

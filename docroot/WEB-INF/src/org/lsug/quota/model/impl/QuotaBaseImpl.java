@@ -14,7 +14,10 @@
 
 package org.lsug.quota.model.impl;
 
+import com.liferay.portal.kernel.exception.SystemException;
+
 import org.lsug.quota.model.Quota;
+import org.lsug.quota.service.QuotaLocalServiceUtil;
 
 /**
  * The extended model base implementation for the Quota service. Represents a row in the &quot;LSUGQUOTA_Quota&quot; database table, with each column mapped to a property of this class.
@@ -34,4 +37,12 @@ public abstract class QuotaBaseImpl extends QuotaModelImpl implements Quota {
 	 *
 	 * Never modify or reference this class directly. All methods that expect a quota model instance should use the {@link Quota} interface instead.
 	 */
+	public void persist() throws SystemException {
+		if (this.isNew()) {
+			QuotaLocalServiceUtil.addQuota(this);
+		}
+		else {
+			QuotaLocalServiceUtil.updateQuota(this);
+		}
+	}
 }
