@@ -1,12 +1,12 @@
 <!DOCTYPE service-builder PUBLIC
     "-//Liferay//DTD Service Builder 6.0.0//EN"
     "http://www.liferay.com/dtd/liferay-service-builder_6_1_0.dtd">
-<service-builder package-path="org.lsug">
+<service-builder package-path="org.lsug.quota">
 	<namespace>LSUGQUOTA</namespace>
 	
 	<entity name="Quota">
 		<!-- Primary keys -->
-		<column name="qoutaId" type="long" primary="true"/>
+		<column name="quotaId" type="long" primary="true"/>
 		<column name="classNameId" type="long"/>
 		<column name="classPK" type="String"/>
 		
