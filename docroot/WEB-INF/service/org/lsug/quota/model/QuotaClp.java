@@ -201,6 +201,10 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 		throw new UnsupportedOperationException();
 	}
 
+	public boolean isExceeded() {
+		throw new UnsupportedOperationException();
+	}
+
 	public BaseModel<?> getQuotaRemoteModel() {
 		return _quotaRemoteModel;
 	}

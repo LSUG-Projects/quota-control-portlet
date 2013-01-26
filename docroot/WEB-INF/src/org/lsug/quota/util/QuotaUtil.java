@@ -63,18 +63,38 @@ public class QuotaUtil {
 	public static boolean hasQuota(long groupId, long userId, long size)
 		throws PortalException, SystemException {
 
+		final Quota groupQuota = getGroupQuota(groupId);
+		final Quota companyQuota = getCompanyQuota(groupId);
+
+		return groupQuota.hasFreeMB(size) && companyQuota.hasFreeMB(size);
+	}
+
+	public static boolean checkAlerts(long groupId, long userId)
+		throws PortalException, SystemException {
+
+		Quota groupQuota = getGroupQuota(groupId);
+		Quota companyQuota = getCompanyQuota(groupId);
+
+		return groupQuota.isExceeded() || companyQuota.isExceeded();
+	}
+
+	private static Quota getCompanyQuota(long groupId)
+		throws PortalException, SystemException {
+
 		final Group group = GroupLocalServiceUtil.getGroup(groupId);
 		final Company company =
 			CompanyLocalServiceUtil.getCompany(group.getCompanyId());
 
-		Quota groupQuota =
-			QuotaLocalServiceUtil.getQuotaByClassNameIdClassPK(
-				PortalUtil.getClassNameId(Group.class), group.getClassPK());
-		Quota companyQuota =
-			QuotaLocalServiceUtil.getQuotaByClassNameIdClassPK(
-				PortalUtil.getClassNameId(Company.class),
-				company.getCompanyId());
+		return QuotaLocalServiceUtil.getQuotaByClassNameIdClassPK(
+			PortalUtil.getClassNameId(Company.class), company.getCompanyId());
+	}
 
-		return groupQuota.hasFreeMB(size) && companyQuota.hasFreeMB(size);
+	private static Quota getGroupQuota(long groupId)
+		throws PortalException, SystemException {
+
+		final Group group = GroupLocalServiceUtil.getGroup(groupId);
+		
+		return QuotaLocalServiceUtil.getQuotaByClassNameIdClassPK(
+			PortalUtil.getClassNameId(Group.class), group.getClassPK());
 	}
 }
