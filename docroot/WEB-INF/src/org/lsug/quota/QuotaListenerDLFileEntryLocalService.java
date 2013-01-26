@@ -1,4 +1,4 @@
-package org.lsug;
+package org.lsug.quota;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
