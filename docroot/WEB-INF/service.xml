@@ -4,11 +4,11 @@
 <service-builder package-path="org.lsug.quota">
 	<namespace>LSUGQUOTA</namespace>
 	
-	<entity name="Quota">
+	<entity name="Quota" local-service="true">
 		<!-- Primary keys -->
 		<column name="quotaId" type="long" primary="true"/>
 		<column name="classNameId" type="long"/>
-		<column name="classPK" type="String"/>
+		<column name="classPK" type="long"/>
 		
 		<!-- Maximum quota (in MB) -->
 		<column name="quotaAssigned" type="long"/>
@@ -26,5 +26,14 @@
 			depends on the type of quota) will receive a notification
 		-->
 		<column name="quotaAlert" type="int"/>
+		
+		<finder return-type="Quota" name="ClassNameIdClassPK">
+			<finder-column name="classNameId"/>
+			<finder-column name="classPK"/>
+		</finder>
 	</entity>
+	
+	<exceptions>
+		<exception>QuotaExceeded</exception>
+	</exceptions>
 </service-builder>
