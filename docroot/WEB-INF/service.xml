@@ -1,0 +1,30 @@
+<!DOCTYPE service-builder PUBLIC
+    "-//Liferay//DTD Service Builder 6.0.0//EN"
+    "http://www.liferay.com/dtd/liferay-service-builder_6_1_0.dtd">
+<service-builder package-path="org.lsug">
+	<namespace>LSUGQUOTA</namespace>
+	
+	<entity name="Quota">
+		<!-- Primary keys -->
+		<column name="qoutaId" type="long" primary="true"/>
+		<column name="classNameId" type="long"/>
+		<column name="classPK" type="String"/>
+		
+		<!-- Maximum quota (in MB) -->
+		<column name="quotaAssigned" type="long"/>
+		
+		<!-- Amount used (in MB) -->
+		<column name="quotaUsed" type="long"/>
+		<!--
+			A quota is either "enabled" (QuotaStatus.ENABLED) or
+			"disabled" (QuotaStatus.DISABLED)			
+		-->
+		<column name="quotaStatus" type="int"/>
+		
+		<!--
+			When reaching this percentage, the user (the particular user
+			depends on the type of quota) will receive a notification
+		-->
+		<column name="quotaAlert" type="int"/>
+	</entity>
+</service-builder>
