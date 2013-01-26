@@ -2,10 +2,15 @@
 <!DOCTYPE hook PUBLIC "-//Liferay//DTD Hook 6.1.0//EN" "http://www.liferay.com/dtd/liferay-hook_6_1_0.dtd">
 
 <hook>
+	<custom-jsp-dir>/custom_jsps</custom-jsp-dir>
 	<service>
 		<service-type>
 			com.liferay.portlet.documentlibrary.service.DLFileEntryLocalService
 		</service-type>
 		<service-impl>org.lsug.quota.QuotaListenerDLFileEntryLocalService</service-impl>
 	</service>
+	<struts-action>
+	    <struts-action-path>/document_library/edit_file_entry</struts-action-path>
+	    <struts-action-impl>org.lsug.quota.QuotaEditFileEntryAction</struts-action-impl>
+    </struts-action>
 </hook>

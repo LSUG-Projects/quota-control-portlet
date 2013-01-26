@@ -26,6 +26,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
 
+import org.lsug.quota.util.QuotaUtil;
+
 public class QuotaListenerDLFileEntryLocalService 
 	extends DLFileEntryLocalServiceWrapper {
 	
@@ -46,6 +48,8 @@ public class QuotaListenerDLFileEntryLocalService
 		// Add quota control here
 
 		System.out.println("Controlando quota excedida - file size: " + size);
+		
+		QuotaUtil.checkQuotaExceeded(groupId, userId, size);
 
 		DLFileEntry dlFileEntry = super.addFileEntry(
 			userId, groupId, repositoryId, folderId, sourceFileName, mimeType, 

@@ -14,6 +14,15 @@
 
 package org.lsug.quota.util;
 
+import com.liferay.portal.kernel.exception.PortalException;
+
+import org.lsug.quota.QuotaExceededException;
+
 public class QuotaUtil {
 
+	public static void checkQuotaExceeded(long groupId, long userId, long size) 
+		throws PortalException {
+
+		throw new QuotaExceededException();		
+	}
 }
