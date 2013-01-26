@@ -3,12 +3,20 @@
 
 <liferay-portlet-app>
 	<portlet>
-		<portlet-name>quota-control</portlet-name>
+		<portlet-name>server-quota-portlet</portlet-name>
 		<icon>/icon.png</icon>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
-		<css-class-wrapper>quota-control-portlet</css-class-wrapper>
+		<css-class-wrapper>server-quota-portlet</css-class-wrapper>
+	</portlet>
+	<portlet>
+		<portlet-name>site-quota-portlet</portlet-name>
+		<icon>/icon.png</icon>
+		<instanceable>false</instanceable>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
+		<css-class-wrapper>site-quota-portlet</css-class-wrapper>
 	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>
