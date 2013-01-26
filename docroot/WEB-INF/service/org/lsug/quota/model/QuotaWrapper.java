@@ -298,7 +298,7 @@ public class QuotaWrapper implements Quota, ModelWrapper<Quota> {
 		return new QuotaWrapper((Quota)_quota.clone());
 	}
 
-	public int compareTo(Quota quota) {
+	public int compareTo(org.lsug.quota.model.Quota quota) {
 		return _quota.compareTo(quota);
 	}
 
@@ -307,11 +307,11 @@ public class QuotaWrapper implements Quota, ModelWrapper<Quota> {
 		return _quota.hashCode();
 	}
 
-	public com.liferay.portal.model.CacheModel<Quota> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<org.lsug.quota.model.Quota> toCacheModel() {
 		return _quota.toCacheModel();
 	}
 
-	public Quota toEscapedModel() {
+	public org.lsug.quota.model.Quota toEscapedModel() {
 		return new QuotaWrapper(_quota.toEscapedModel());
 	}
 
