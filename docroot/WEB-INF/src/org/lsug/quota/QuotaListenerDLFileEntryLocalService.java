@@ -83,5 +83,29 @@ public class QuotaListenerDLFileEntryLocalService
 
 		System.out.println("Actualizando quota - file size: " + size);
 	}
+	
+	public DLFileEntry updateFileEntry(
+			long userId, long fileEntryId, String sourceFileName, 
+			String mimeType, String title, String description, String changeLog,
+			boolean majorVersion, long fileEntryTypeId, 
+			Map<String, Fields>fieldsMap, File file, InputStream is, long size, 
+			ServiceContext serviceContext)
+		throws PortalException, SystemException {
+		
+		// Add quota control here
+
+		System.out.println("Controlando quota excedida - file size: " + size);
+
+		DLFileEntry dlFileEntry = super.updateFileEntry(
+			userId, fileEntryId, sourceFileName, mimeType, title, description, 
+			changeLog, majorVersion, fileEntryTypeId, fieldsMap, file, is, size,
+			serviceContext);
+		
+		// Update consumed quota here
+
+		System.out.println("Actualizando quota - file size: " + size);
+		
+		return dlFileEntry;
+	}
 
 }
