@@ -329,6 +329,14 @@ public class QuotaWrapper implements Quota, ModelWrapper<Quota> {
 		_quota.persist();
 	}
 
+	public boolean hasFreeMB(long mb) {
+		return _quota.hasFreeMB(mb);
+	}
+
+	public boolean isExceeded() {
+		return _quota.isExceeded();
+	}
+
 	/**
 	 * @deprecated Renamed to {@link #getWrappedModel}
 	 */
