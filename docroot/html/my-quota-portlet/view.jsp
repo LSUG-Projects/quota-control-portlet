@@ -18,4 +18,4 @@
 
 <portlet:defineObjects />
 
-This is the <b>Server Quota</b> portlet.
+This is the <b>My Quota</b> portlet in View mode.
