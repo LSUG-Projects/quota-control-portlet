@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<entity-mappings xmlns="http://java.sun.com/xml/ns/persistence/orm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd">
+	<persistence-unit-metadata>
+		<xml-mapping-metadata-complete/>
+		<persistence-unit-defaults>
+			<access>PROPERTY</access>
+		</persistence-unit-defaults>
+	</persistence-unit-metadata>
+	<mapped-superclass class="org.lsug.model.impl.QuotaModelImpl">
+		<attributes>
+			<id name="qoutaId" />
+			<basic name="classNameId" />
+			<basic name="classPK" />
+			<basic name="quotaAssigned" />
+			<basic name="quotaUsed" />
+			<basic name="quotaStatus" />
+			<basic name="quotaAlert" />
+			<transient name="className" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<mapped-superclass class="org.lsug.quota.model.impl.QuotaModelImpl">
+		<attributes>
+			<id name="quotaId" />
+			<basic name="classNameId" />
+			<basic name="classPK" />
+			<basic name="quotaAssigned" />
+			<basic name="quotaUsed" />
+			<basic name="quotaStatus" />
+			<basic name="quotaAlert" />
+			<transient name="className" />
+			<transient name="modelAttributes" />
+			<transient name="primaryKey" />
+			<transient name="primaryKeyObj" />
+		</attributes>
+	</mapped-superclass>
+	<entity class="org.lsug.model.impl.QuotaImpl" name="Quota">
+		<table name="LSUGQUOTA_Quota" />
+		<attributes />
+	</entity>
+	<entity class="org.lsug.quota.model.impl.QuotaImpl" name="Quota">
+		<table name="LSUGQUOTA_Quota" />
+		<attributes />
+	</entity>
+</entity-mappings>
