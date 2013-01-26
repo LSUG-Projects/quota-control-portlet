@@ -6,27 +6,27 @@
 		<portlet-name>server-quota-portlet</portlet-name>
 		<icon>/html/server-quota/icon.png</icon>
 		<control-panel-entry-category>server</control-panel-entry-category>
-		<control-panel-entry-weight>2.0</control-panel-entry-weight>
+		<control-panel-entry-weight>2.5</control-panel-entry-weight>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
 		<css-class-wrapper>server-quota-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
-		<portlet-name>site-quota-portlet</portlet-name>
-		<icon>/html/site-quota/icon.png</icon>
+		<portlet-name>sites-quota-portlet</portlet-name>
+		<icon>/html/sites-quota/icon.png</icon>
 		<control-panel-entry-category>portal</control-panel-entry-category>
-		<control-panel-entry-weight>2.0</control-panel-entry-weight>
+		<control-panel-entry-weight>2.5</control-panel-entry-weight>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
-		<css-class-wrapper>site-quota-portlet</css-class-wrapper>
+		<css-class-wrapper>sites-quota-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
 		<portlet-name>my-quota-portlet</portlet-name>
 		<icon>/html/my-quota/icon.png</icon>
 		<control-panel-entry-category>my</control-panel-entry-category>
-		<control-panel-entry-weight>3.0</control-panel-entry-weight>
+		<control-panel-entry-weight>2.5</control-panel-entry-weight>
 		<instanceable>false</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>

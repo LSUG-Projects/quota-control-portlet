@@ -2,9 +2,9 @@
 <!DOCTYPE display PUBLIC "-//Liferay//DTD Display 6.1.0//EN" "http://www.liferay.com/dtd/liferay-display_6_1_0.dtd">
 
 <display>
-	<category name="hidden">
-		<portlet id="my-quota-portlet" />
-		<portlet id="server-quota-portlet" />
-		<portlet id="site-quota-portlet" />		
-	</category>
+    <category name="hidden">
+        <portlet id="my-quota-portlet" />
+        <portlet id="server-quota-portlet" />
+        <portlet id="sites-quota-portlet" />
+    </category>
 </display>

@@ -38,12 +38,12 @@
 		</security-role-ref>
 	</portlet>
 	<portlet>
-		<portlet-name>site-quota-portlet</portlet-name>
-		<display-name>Site Quota Portlet</display-name>
+		<portlet-name>sites-quota-portlet</portlet-name>
+		<display-name>Sites Quota Portlet</display-name>
 		<portlet-class>com.liferay.util.bridges.mvc.MVCPortlet</portlet-class>
 		<init-param>
 			<name>view-template</name>
-			<value>/html/site-quota/view.jsp</value>
+			<value>/html/sites-quota/view.jsp</value>
 		</init-param>
 		<expiration-cache>0</expiration-cache>
 		<supports>
@@ -56,9 +56,9 @@
 		<supported-locale>gl</supported-locale>
         <resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
-			<title>Site Quota</title>
-			<short-title>Site Quota</short-title>
-			<keywords>Site Quota</keywords>
+			<title>Sites Quota</title>
+			<short-title>Sites Quota</short-title>
+			<keywords>Sites Quota</keywords>
 		</portlet-info>
 		<security-role-ref>
 			<role-name>administrator</role-name>
