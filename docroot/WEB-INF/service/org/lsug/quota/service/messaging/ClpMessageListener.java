@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 
 import org.lsug.quota.service.ClpSerializer;
+import org.lsug.quota.service.QuotaLocalServiceUtil;
 import org.lsug.quota.service.QuotaServiceUtil;
 
 /**
@@ -35,6 +36,8 @@ public class ClpMessageListener extends BaseMessageListener {
 
 		if (command.equals("undeploy") &&
 				servletContextName.equals(getServletContextName())) {
+			QuotaLocalServiceUtil.clearService();
+
 			QuotaServiceUtil.clearService();
 		}
 	}

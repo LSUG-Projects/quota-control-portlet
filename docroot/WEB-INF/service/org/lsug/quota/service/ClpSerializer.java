@@ -232,6 +232,10 @@ public class ClpSerializer {
 			return new SystemException();
 		}
 
+		if (className.equals("org.lsug.quota.QuotaExceededException")) {
+			return new org.lsug.quota.QuotaExceededException();
+		}
+
 		if (className.equals("org.lsug.quota.NoSuchQuotaException")) {
 			return new org.lsug.quota.NoSuchQuotaException();
 		}

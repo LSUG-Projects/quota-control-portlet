@@ -1,73 +1,109 @@
-package org.lsug.quota;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.service.ServiceContext;
-import com.liferay.portlet.documentlibrary.model.DLFileEntry;
-import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalService;
-import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceWrapper;
-import com.liferay.portlet.dynamicdatamapping.storage.Fields;
+package org.lsug.quota;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
 
-public class QuotaListenerDLFileEntryLocalService 
+import org.lsug.quota.model.Quota;
+import org.lsug.quota.service.QuotaLocalServiceUtil;
+
+import com.liferay.compat.portal.util.PortalUtil;
+import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.model.Company;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
+import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalService;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceWrapper;
+import com.liferay.portlet.dynamicdatamapping.storage.Fields;
+
+public class QuotaListenerDLFileEntryLocalService
 	extends DLFileEntryLocalServiceWrapper {
-	
+
 	public QuotaListenerDLFileEntryLocalService(
 		DLFileEntryLocalService dlFileEntryLocalService) {
-		
+
 		super(dlFileEntryLocalService);
 	}
-	
+
 	public DLFileEntry addFileEntry(
-			long userId, long groupId, long repositoryId, long folderId,
-			String sourceFileName, String mimeType, String title,
-			String description, String changeLog, long fileEntryTypeId,
-			Map<String, Fields> fieldsMap, File file, InputStream is, long size,
-			ServiceContext serviceContext)
+		long userId, long groupId, long repositoryId, long folderId,
+		String sourceFileName, String mimeType, String title,
+		String description, String changeLog, long fileEntryTypeId,
+		Map<String, Fields> fieldsMap, File file, InputStream is, long size,
+		ServiceContext serviceContext)
 		throws PortalException, SystemException {
-		
-		// Add quota control here
 
-		System.out.println("Controlando quota excedida - file size: " + size);
+		if (!hasQuota(groupId, userId, size))
+			throw new QuotaExceededException();
 
-		DLFileEntry dlFileEntry = super.addFileEntry(
-			userId, groupId, repositoryId, folderId, sourceFileName, mimeType, 
-			title, description, changeLog, fileEntryTypeId, fieldsMap, file, is,
-			size, serviceContext);
-		
-		// Update consumed quota here
+		DLFileEntry dlFileEntry =
+			super.addFileEntry(
+				userId, groupId, repositoryId, folderId, sourceFileName,
+				mimeType, title, description, changeLog, fileEntryTypeId,
+				fieldsMap, file, is, size, serviceContext);
 
-		System.out.println("Actualizando quota - file size: " + size);
-		
+		// TODO: Move to QuotaUtil.
+		decreaseQuota(groupId, userId, size);
+
 		return dlFileEntry;
 	}
 
-	protected void deleteFileEntry(DLFileEntry dlFileEntry)
-			throws PortalException, SystemException {
-		
-		super.deleteDLFileEntry(dlFileEntry);
-		
-		// Update consumed quota here
-		
-		System.out.println("Actualizando quota - file size: " + 
-			dlFileEntry.getSize());
+	private void decreaseQuota(long groupId, long userId, long size)
+		throws PortalException, SystemException, NoSuchQuotaException,
+		QuotaExceededException {
+
+		final Group group = GroupLocalServiceUtil.getGroup(groupId);
+		final Company company =
+			CompanyLocalServiceUtil.getCompany(group.getCompanyId());
+
+		QuotaLocalServiceUtil.decrementQuota(
+			PortalUtil.getClassNameId(Group.class), group.getClassPK(), size);
+
+		QuotaLocalServiceUtil.decrementQuota(
+			PortalUtil.getClassNameId(Company.class), company.getCompanyId(),
+			size);
+	}
+
+	private void increaseQuota(long groupId, long userId, long size) throws PortalException, SystemException {
+		final Group group = GroupLocalServiceUtil.getGroup(groupId);
+		final Company company =
+			CompanyLocalServiceUtil.getCompany(group.getCompanyId());
+
+		QuotaLocalServiceUtil.decrementQuota(
+			PortalUtil.getClassNameId(Group.class), group.getClassPK(), size);
+
+		QuotaLocalServiceUtil.decrementQuota(
+			PortalUtil.getClassNameId(Company.class), company.getCompanyId(),
+			size);
 	}
 	
+	private boolean hasQuota(long groupId, long userId, long size) {
+
+		return true;
+	}
+
+	protected void deleteFileEntry(DLFileEntry dlFileEntry)
+		throws PortalException, SystemException {
+
+		super.deleteDLFileEntry(dlFileEntry);
+
+		increaseQuota(dlFileEntry.getGroupId(), dlFileEntry.getUserId(), dlFileEntry.getSize());
+	}
+
 	public void deleteFileEntry(long fileEntryId)
 		throws PortalException, SystemException {
 
 		DLFileEntry dlFileEntry = super.getFileEntry(fileEntryId);
 
-		long size = dlFileEntry.getSize();
-
 		super.deleteDLFileEntry(fileEntryId);
 
-		// Update consumed quota here
-
-		System.out.println("Actualizando quota - file size: " + size);
+		increaseQuota(dlFileEntry.getGroupId(), dlFileEntry.getUserId(), dlFileEntry.getSize());
 	}
 
 	public void deleteFileEntry(long userId, long fileEntryId)
@@ -75,36 +111,34 @@ public class QuotaListenerDLFileEntryLocalService
 
 		DLFileEntry dlFileEntry = super.getFileEntry(fileEntryId);
 
-		long size = dlFileEntry.getSize();
-
 		super.deleteFileEntry(userId, fileEntryId);
-		
-		// Update consumed quota here
 
-		System.out.println("Actualizando quota - file size: " + size);
+		increaseQuota(dlFileEntry.getGroupId(), dlFileEntry.getUserId(), dlFileEntry.getSize());
 	}
-	
+
 	public DLFileEntry updateFileEntry(
-			long userId, long fileEntryId, String sourceFileName, 
-			String mimeType, String title, String description, String changeLog,
-			boolean majorVersion, long fileEntryTypeId, 
-			Map<String, Fields>fieldsMap, File file, InputStream is, long size, 
-			ServiceContext serviceContext)
+		long userId, long fileEntryId, String sourceFileName, String mimeType,
+		String title, String description, String changeLog,
+		boolean majorVersion, long fileEntryTypeId,
+		Map<String, Fields> fieldsMap, File file, InputStream is, long size,
+		ServiceContext serviceContext)
 		throws PortalException, SystemException {
-		
-		// Add quota control here
 
-		System.out.println("Controlando quota excedida - file size: " + size);
-
-		DLFileEntry dlFileEntry = super.updateFileEntry(
-			userId, fileEntryId, sourceFileName, mimeType, title, description, 
-			changeLog, majorVersion, fileEntryTypeId, fieldsMap, file, is, size,
-			serviceContext);
+		DLFileEntry fileEntry = DLFileEntryLocalServiceUtil.getFileEntry(fileEntryId);
+		long groupId = fileEntry.getGroupId();
+		increaseQuota(groupId, userId, size);
 		
-		// Update consumed quota here
+		if (!hasQuota(groupId, userId, size))
+			throw new QuotaExceededException();
 
-		System.out.println("Actualizando quota - file size: " + size);
-		
+		DLFileEntry dlFileEntry =
+			super.updateFileEntry(
+				userId, fileEntryId, sourceFileName, mimeType, title,
+				description, changeLog, majorVersion, fileEntryTypeId,
+				fieldsMap, file, is, size, serviceContext);
+
+		decreaseQuota(groupId, userId, dlFileEntry.getSize());
+
 		return dlFileEntry;
 	}
 

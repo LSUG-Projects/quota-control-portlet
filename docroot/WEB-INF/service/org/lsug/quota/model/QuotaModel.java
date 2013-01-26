@@ -14,7 +14,7 @@
 
 package org.lsug.quota.model;
 
-import com.liferay.portal.kernel.bean.AutoEscape;
+import com.liferay.portal.model.AttachedModel;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.service.ServiceContext;
@@ -36,7 +36,7 @@ import java.io.Serializable;
  * @see org.lsug.quota.model.impl.QuotaModelImpl
  * @generated
  */
-public interface QuotaModel extends BaseModel<Quota> {
+public interface QuotaModel extends AttachedModel, BaseModel<Quota> {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -99,15 +99,14 @@ public interface QuotaModel extends BaseModel<Quota> {
 	 *
 	 * @return the class p k of this quota
 	 */
-	@AutoEscape
-	public String getClassPK();
+	public long getClassPK();
 
 	/**
 	 * Sets the class p k of this quota.
 	 *
 	 * @param classPK the class p k of this quota
 	 */
-	public void setClassPK(String classPK);
+	public void setClassPK(long classPK);
 
 	/**
 	 * Returns the quota assigned of this quota.
