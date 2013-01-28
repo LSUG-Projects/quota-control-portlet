@@ -20,7 +20,7 @@ import javax.portlet.ActionResponse;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import org.lsug.quota.model.Quota;
-import org.lsug.quota.service.QuotaServiceUtil;
+import org.lsug.quota.service.QuotaLocalServiceUtil;
 
 public class SitesQuotaPortlet extends MVCPortlet {
 	
@@ -34,7 +34,7 @@ public class SitesQuotaPortlet extends MVCPortlet {
 		long quotaAssigned = ParamUtil.getLong(actionRequest, "quotaAssigned");
 		long quotaUsed = ParamUtil.getLong(actionRequest, "quotaUsed");
 		
-		return QuotaServiceUtil.updateQuota(quotaId, classNameId, classPK, 
+		return QuotaLocalServiceUtil.updateQuota(quotaId, classNameId, classPK, 
 				quotaAlert, quotaAssigned, quotaUsed);
 	}
 

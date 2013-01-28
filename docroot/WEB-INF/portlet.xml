@@ -18,7 +18,7 @@
         <supported-locale>es</supported-locale>
         <supported-locale>eu</supported-locale>
 		<supported-locale>gl</supported-locale>
-        <resource-bundle>content.Language</resource-bundle>
+        <resource-bundle>org.lsug.quota.i18n.Language</resource-bundle>
 		<portlet-info>
 			<title>Server Quota</title>
 			<short-title>Server Quota</short-title>
@@ -54,7 +54,7 @@
         <supported-locale>es</supported-locale>
         <supported-locale>eu</supported-locale>
 		<supported-locale>gl</supported-locale>
-        <resource-bundle>content.Language</resource-bundle>
+        <resource-bundle>org.lsug.quota.i18n.Language</resource-bundle>
 		<portlet-info>
 			<title>Sites Quota</title>
 			<short-title>Sites Quota</short-title>

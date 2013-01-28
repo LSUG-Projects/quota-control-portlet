@@ -15,29 +15,35 @@
 %>
 <%@ include file="/html/sites-quota/init.jsp"%>
 
-<liferay-ui:message key="sites-quota-title" />
+<%
+String orderByCol = ParamUtil.getString(request, "orderByCol", "quotaUsed");
+String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 
-ON | OFF
-<liferay-ui:message key="total-quota" />
-<%=QuotaUtil.getTotalQuota(companyId)%>
-<liferay-ui:message key="used-space" />
-<%=QuotaUtil.getUsedSpace(companyId)%>
-<liferay-ui:message key="allocated-space" />
-<%=QuotaUtil.getAllocatedSpace(companyId)%>
+Quota companyQuota = QuotaUtil.getCompanyQuota(companyId);
+%>
+<liferay-ui:message key="sites-quota-description" />
+<br/><br/>
+niON | niOFF
+<c:if test="<%= companyQuota != null %>">
+	<liferay-ui:message key="used-space" />
+	<%= companyQuota.getQuotaUsed() %>
+	<liferay-ui:message key="assigned-space" />
+	<%= companyQuota.getQuotaAssigned() %>
+</c:if>
 
 <liferay-ui:search-container delta="5" orderByCol="<%=orderByCol%>"
-	orderByType="<%=orderByType%>" iteratorURL="<%=iteratorURL%>">
+	orderByType="<%=orderByType%>">
 	<liferay-ui:search-container-results>
 		<%
-			results = QuotaServiceUtil.findQuotas(classNameId);
-			total = QuotaServiceUtil.countQuotas(classNameId);
+			results = null;
+			total = 0;
 			pageContext.setAttribute("results", results);
 			pageContext.setAttribute("total", total);
 		%>
 	</liferay-ui:search-container-results>
-	<liferay-ui:search-container-row className="org.lsug.model.Quota" keyProperty="quotaId" modelVar="quota">
-		<liferay-ui:search-container-column-text name="quotaAlert" value="<%= quota.getAlert() %>" />
-		<liferay-ui:search-container-column-text name="quotaAssigned" value="<%= quota.getQuotaAssigned() %>" />
-		<liferay-ui:search-container-column-text name="quotaUsed" value="<%= quota.getQuotaUsed() %>" />
+	<liferay-ui:search-container-row className="org.lsug.quota.model.Quota" keyProperty="quotaId" modelVar="quota">
+		<liferay-ui:search-container-column-text name="quotaAlert" value="<%= String.valueOf(quota.getQuotaAlert()) %>" />
+		<liferay-ui:search-container-column-text name="quotaAssigned" value="<%= String.valueOf(quota.getQuotaAssigned()) %>" />
+		<liferay-ui:search-container-column-text name="quotaUsed" value="<%= String.valueOf(quota.getQuotaUsed()) %>" />
 	</liferay-ui:search-container-row>
 </liferay-ui:search-container>

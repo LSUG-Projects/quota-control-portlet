@@ -18,6 +18,7 @@ import org.lsug.quota.NoSuchQuotaException;
 import org.lsug.quota.QuotaExceededException;
 import org.lsug.quota.model.Quota;
 import org.lsug.quota.service.QuotaLocalServiceUtil;
+import org.lsug.quota.NoSuchQuotaException;
 
 import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -64,7 +65,7 @@ public class QuotaUtil {
 		throws PortalException, SystemException {
 
 		final Quota groupQuota = getGroupQuota(groupId);
-		final Quota companyQuota = getCompanyQuota(groupId);
+		final Quota companyQuota = getCompanyQuotaByGroupId(groupId);
 
 		return groupQuota.hasFreeMB(size) && companyQuota.hasFreeMB(size);
 	}
@@ -73,12 +74,25 @@ public class QuotaUtil {
 		throws PortalException, SystemException {
 
 		Quota groupQuota = getGroupQuota(groupId);
-		Quota companyQuota = getCompanyQuota(groupId);
+		Quota companyQuota = getCompanyQuotaByGroupId(groupId);
 
 		return groupQuota.isExceeded() || companyQuota.isExceeded();
 	}
+	
+	public static Quota getCompanyQuota(long companyId)
+			throws PortalException, SystemException {
 
-	private static Quota getCompanyQuota(long groupId)
+		try {
+			Quota quota = QuotaLocalServiceUtil.getQuotaByClassNameIdClassPK(
+					PortalUtil.getClassNameId(Company.class), companyId);
+			
+			return quota;
+		} catch(NoSuchQuotaException nsqe) {
+			return null;
+		}
+	}
+
+	private static Quota getCompanyQuotaByGroupId(long groupId)
 		throws PortalException, SystemException {
 
 		final Group group = GroupLocalServiceUtil.getGroup(groupId);
