@@ -14,11 +14,11 @@
 			<mime-type>text/html</mime-type>
 		</supports>
 		<supported-locale>ca</supported-locale>
-        <supported-locale>en</supported-locale>
-        <supported-locale>es</supported-locale>
-        <supported-locale>eu</supported-locale>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+		<supported-locale>eu</supported-locale>
 		<supported-locale>gl</supported-locale>
-        <resource-bundle>org.lsug.quota.i18n.Language</resource-bundle>
+		<resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
 			<title>Server Quota</title>
 			<short-title>Server Quota</short-title>
@@ -50,11 +50,11 @@
 			<mime-type>text/html</mime-type>
 		</supports>
 		<supported-locale>ca</supported-locale>
-        <supported-locale>en</supported-locale>
-        <supported-locale>es</supported-locale>
-        <supported-locale>eu</supported-locale>
+		<supported-locale>en</supported-locale>
+		<supported-locale>es</supported-locale>
+		<supported-locale>eu</supported-locale>
 		<supported-locale>gl</supported-locale>
-        <resource-bundle>org.lsug.quota.i18n.Language</resource-bundle>
+		<resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
 			<title>Sites Quota</title>
 			<short-title>Sites Quota</short-title>

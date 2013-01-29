@@ -23,19 +23,21 @@ import org.lsug.quota.model.Quota;
 import org.lsug.quota.service.QuotaLocalServiceUtil;
 
 public class SitesQuotaPortlet extends MVCPortlet {
-	
-	public Quota updateQuota(ActionRequest actionRequest, ActionResponse actionResponse) 
-			throws Exception {
-		
+
+	public Quota updateQuota(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
 		long quotaId = ParamUtil.getLong(actionRequest, "quotaId");
 		long classNameId = ParamUtil.getLong(actionRequest, "classNameId");
 	    long classPK = ParamUtil.getLong(actionRequest, "classPK");
 		int quotaAlert = ParamUtil.getInteger(actionRequest, "quotaAlert");
 		long quotaAssigned = ParamUtil.getLong(actionRequest, "quotaAssigned");
 		long quotaUsed = ParamUtil.getLong(actionRequest, "quotaUsed");
-		
-		return QuotaLocalServiceUtil.updateQuota(quotaId, classNameId, classPK, 
-				quotaAlert, quotaAssigned, quotaUsed);
+
+		return QuotaLocalServiceUtil.updateQuota(
+			quotaId, classNameId, classPK, quotaAlert, quotaAssigned,
+			quotaUsed);
 	}
 
 }
