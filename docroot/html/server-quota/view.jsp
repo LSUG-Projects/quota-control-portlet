@@ -32,13 +32,13 @@
 	<%-- TODO --%>
  	<%--liferay-ui:search-container-column-text name="numUser" value="${serverVO.numUser }" /> --%>
  	
- 	<liferay-ui:search-container-column-text name="quotaStatus" value="${serverVO.quota.quotaStatus }" />
+ 	<liferay-ui:search-container-column-text name="quota-status" value="${serverVO.quota.quotaStatus }" />
  	
- 	<liferay-ui:search-container-column-text name="quotaAlert" value="${serverVO.quota.quotaAlert }" />
+ 	<liferay-ui:search-container-column-text name="quota-alert" value="${serverVO.quota.quotaAlert }" />
  	
- 	<liferay-ui:search-container-column-text name="quotaAssigned" value="${serverVO.quota.quotaAssigned }" />
+ 	<liferay-ui:search-container-column-text name="quota-assigned" value="${serverVO.quota.quotaAssigned }" />
  	
- 	<liferay-ui:search-container-column-text name="quotaUsed" value="${serverVO.quota.quotaUsed }" />
+ 	<liferay-ui:search-container-column-text name="quota-used" value="${serverVO.quota.quotaUsed }" />
 	
 	<liferay-ui:search-container-column-text name="actions">
       	
