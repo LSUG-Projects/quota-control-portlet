@@ -15,31 +15,46 @@
 package org.lsug.quota.service.impl;
 
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.ParamUtil;
 
 import org.lsug.quota.NoSuchQuotaException;
 import org.lsug.quota.model.Quota;
-import org.lsug.quota.service.QuotaLocalServiceUtil;
 import org.lsug.quota.service.base.QuotaLocalServiceBaseImpl;
 
 /**
- * The implementation of the quota local service.
- *
- * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link org.lsug.quota.service.QuotaLocalService} interface.
- *
- * <p>
- * This is a local service. Methods of this service will not have security checks based on the propagated JAAS credentials because this service can only be accessed from within the same VM.
- * </p>
- *
+ * The implementation of the quota local service. <p> All custom service methods
+ * should be put in this class. Whenever methods are added, rerun ServiceBuilder
+ * to copy their definitions into the
+ * {@link org.lsug.quota.service.QuotaLocalService} interface. <p> This is a
+ * local service. Methods of this service will not have security checks based on
+ * the propagated JAAS credentials because this service can only be accessed
+ * from within the same VM. </p>
+ * 
  * @author Brian Wing Shun Chan
  * @see org.lsug.quota.service.base.QuotaLocalServiceBaseImpl
  * @see org.lsug.quota.service.QuotaLocalServiceUtil
  */
 public class QuotaLocalServiceImpl extends QuotaLocalServiceBaseImpl {
 
+	public Quota addQuota(
+		long classNameId, long classPK, int quotaAlert, long quotaAssigned,
+		long quotaUsed, int quotaStatus)
+		throws NoSuchQuotaException, SystemException {
+
+		long quotaId = counterLocalService.increment(Quota.class.getName());
+		Quota quota = quotaPersistence.create(quotaId);
+
+		quota.setClassNameId(classNameId);
+		quota.setClassPK(classPK);
+		quota.setQuotaAlert(quotaAlert);
+		quota.setQuotaAssigned(quotaAssigned);
+		quota.setQuotaUsed(quotaUsed);
+		quota.setQuotaStatus(quotaStatus);
+
+		return quotaPersistence.update(quota, false);
+	}
+
 	public Quota getQuotaByClassNameIdClassPK(
-			final long classNameId, final long classPK)
+		final long classNameId, final long classPK)
 		throws NoSuchQuotaException, SystemException {
 
 		return getQuotaPersistence().findByClassNameIdClassPK(
@@ -47,7 +62,7 @@ public class QuotaLocalServiceImpl extends QuotaLocalServiceBaseImpl {
 	}
 
 	public Quota updateQuota(
-			final long classNameId, final long classPK, final long fileSize)
+		final long classNameId, final long classPK, final long fileSize)
 		throws NoSuchQuotaException, SystemException {
 
 		Quota quota = getQuotaByClassNameIdClassPK(classNameId, classPK);
@@ -56,19 +71,26 @@ public class QuotaLocalServiceImpl extends QuotaLocalServiceBaseImpl {
 
 		return updateQuota(quota);
 	}
-	
+
 	public Quota updateQuota(
-			long quotaId, long classNameId, long classPK, int quotaAlert, 
-			long quotaAssigned, long quotaUsed) 
+		long quotaId, long classNameId, long classPK, int quotaAlert,
+		long quotaAssigned, long quotaUsed, int quotaStatus)
 		throws NoSuchQuotaException, SystemException {
-		
-		return updateQuota(
-			quotaId, classNameId, classPK, quotaAlert, quotaAssigned, 
-			quotaUsed);
+
+		Quota quota = quotaPersistence.fetchByPrimaryKey(quotaId);
+
+		quota.setClassNameId(classNameId);
+		quota.setClassPK(classPK);
+		quota.setQuotaAlert(quotaAlert);
+		quota.setQuotaAssigned(quotaAssigned);
+		quota.setQuotaUsed(quotaUsed);
+		quota.setQuotaStatus(quotaStatus);
+
+		return quotaPersistence.update(quota, false);
 	}
 
 	public Quota decrementQuota(
-			final long classNameId, final long classPK, final long fileSize)
+		final long classNameId, final long classPK, final long fileSize)
 		throws NoSuchQuotaException, SystemException {
 
 		if (fileSize >= 0)
@@ -79,7 +101,7 @@ public class QuotaLocalServiceImpl extends QuotaLocalServiceBaseImpl {
 	}
 
 	public Quota incrementQuota(
-			final long classNameId, final long classPK, final long fileSize)
+		final long classNameId, final long classPK, final long fileSize)
 		throws NoSuchQuotaException, SystemException {
 
 		if (fileSize < 0)
@@ -88,5 +110,5 @@ public class QuotaLocalServiceImpl extends QuotaLocalServiceBaseImpl {
 
 		return updateQuota(classNameId, classPK, fileSize);
 	}
-	
+
 }

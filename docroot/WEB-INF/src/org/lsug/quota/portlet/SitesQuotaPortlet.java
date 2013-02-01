@@ -17,7 +17,9 @@ package org.lsug.quota.portlet;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 
+import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.model.Group;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 import org.lsug.quota.model.Quota;
 import org.lsug.quota.service.QuotaLocalServiceUtil;
@@ -25,19 +27,20 @@ import org.lsug.quota.service.QuotaLocalServiceUtil;
 public class SitesQuotaPortlet extends MVCPortlet {
 
 	public Quota updateQuota(
-			ActionRequest actionRequest, ActionResponse actionResponse)
+		ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
 		long quotaId = ParamUtil.getLong(actionRequest, "quotaId");
-		long classNameId = ParamUtil.getLong(actionRequest, "classNameId");
-	    long classPK = ParamUtil.getLong(actionRequest, "classPK");
+		long classNameId = PortalUtil.getClassNameId(Group.class);
+		long classPK = ParamUtil.getLong(actionRequest, "classPK");
 		int quotaAlert = ParamUtil.getInteger(actionRequest, "quotaAlert");
 		long quotaAssigned = ParamUtil.getLong(actionRequest, "quotaAssigned");
 		long quotaUsed = ParamUtil.getLong(actionRequest, "quotaUsed");
+		int quotaStatus = ParamUtil.getInteger(actionRequest, "quotaStatus");
 
 		return QuotaLocalServiceUtil.updateQuota(
 			quotaId, classNameId, classPK, quotaAlert, quotaAssigned,
-			quotaUsed);
+			quotaUsed, quotaStatus);
 	}
 
 }
