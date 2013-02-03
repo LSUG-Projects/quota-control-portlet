@@ -36,8 +36,8 @@ import org.lsug.quota.service.base.QuotaLocalServiceBaseImpl;
 public class QuotaLocalServiceImpl extends QuotaLocalServiceBaseImpl {
 
 	public Quota addQuota(
-		long classNameId, long classPK, int quotaAlert, long quotaAssigned,
-		long quotaUsed, int quotaStatus)
+			long classNameId, long classPK, int quotaAlert, long quotaAssigned,
+			long quotaUsed, int quotaStatus)
 		throws NoSuchQuotaException, SystemException {
 
 		long quotaId = counterLocalService.increment(Quota.class.getName());
