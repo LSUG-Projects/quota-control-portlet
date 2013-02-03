@@ -31,9 +31,4 @@ import org.lsug.quota.service.base.QuotaServiceBaseImpl;
  * @see org.lsug.quota.service.QuotaServiceUtil
  */
 public class QuotaServiceImpl extends QuotaServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this interface directly. Always use {@link org.lsug.quota.service.QuotaServiceUtil} to access the quota remote service.
-	 */
 }

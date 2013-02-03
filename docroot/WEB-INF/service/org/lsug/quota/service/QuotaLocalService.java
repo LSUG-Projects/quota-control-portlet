@@ -241,6 +241,11 @@ public interface QuotaLocalService extends BaseLocalService,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable;
 
+	public org.lsug.quota.model.Quota addQuota(long classNameId, long classPK,
+		int quotaAlert, long quotaAssigned, long quotaUsed, int quotaStatus)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException;
+
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public org.lsug.quota.model.Quota getQuotaByClassNameIdClassPK(
 		long classNameId, long classPK)
@@ -254,7 +259,7 @@ public interface QuotaLocalService extends BaseLocalService,
 
 	public org.lsug.quota.model.Quota updateQuota(long quotaId,
 		long classNameId, long classPK, int quotaAlert, long quotaAssigned,
-		long quotaUsed)
+		long quotaUsed, int quotaStatus)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.lsug.quota.NoSuchQuotaException;
 

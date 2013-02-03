@@ -106,27 +106,33 @@ public class QuotaLocalServiceClpInvoker {
 
 		_methodParameterTypes39 = new String[] { "java.lang.String" };
 
-		_methodName44 = "getQuotaByClassNameIdClassPK";
+		_methodName44 = "addQuota";
 
-		_methodParameterTypes44 = new String[] { "long", "long" };
+		_methodParameterTypes44 = new String[] {
+				"long", "long", "int", "long", "long", "int"
+			};
 
-		_methodName45 = "updateQuota";
+		_methodName45 = "getQuotaByClassNameIdClassPK";
 
-		_methodParameterTypes45 = new String[] { "long", "long", "long" };
+		_methodParameterTypes45 = new String[] { "long", "long" };
 
 		_methodName46 = "updateQuota";
 
-		_methodParameterTypes46 = new String[] {
-				"long", "long", "long", "int", "long", "long"
+		_methodParameterTypes46 = new String[] { "long", "long", "long" };
+
+		_methodName47 = "updateQuota";
+
+		_methodParameterTypes47 = new String[] {
+				"long", "long", "long", "int", "long", "long", "int"
 			};
 
-		_methodName47 = "decrementQuota";
-
-		_methodParameterTypes47 = new String[] { "long", "long", "long" };
-
-		_methodName48 = "incrementQuota";
+		_methodName48 = "decrementQuota";
 
 		_methodParameterTypes48 = new String[] { "long", "long", "long" };
+
+		_methodName49 = "incrementQuota";
+
+		_methodParameterTypes49 = new String[] { "long", "long", "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -230,36 +236,47 @@ public class QuotaLocalServiceClpInvoker {
 
 		if (_methodName44.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
-			return QuotaLocalServiceUtil.getQuotaByClassNameIdClassPK(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue());
+			return QuotaLocalServiceUtil.addQuota(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Integer)arguments[2]).intValue(),
+				((Long)arguments[3]).longValue(),
+				((Long)arguments[4]).longValue(),
+				((Integer)arguments[5]).intValue());
 		}
 
 		if (_methodName45.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
-			return QuotaLocalServiceUtil.updateQuota(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue(),
-				((Long)arguments[2]).longValue());
+			return QuotaLocalServiceUtil.getQuotaByClassNameIdClassPK(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
 		}
 
 		if (_methodName46.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes46, parameterTypes)) {
 			return QuotaLocalServiceUtil.updateQuota(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
-				((Long)arguments[2]).longValue(),
-				((Integer)arguments[3]).intValue(),
-				((Long)arguments[4]).longValue(),
-				((Long)arguments[5]).longValue());
+				((Long)arguments[2]).longValue());
 		}
 
 		if (_methodName47.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes47, parameterTypes)) {
+			return QuotaLocalServiceUtil.updateQuota(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Long)arguments[2]).longValue(),
+				((Integer)arguments[3]).intValue(),
+				((Long)arguments[4]).longValue(),
+				((Long)arguments[5]).longValue(),
+				((Integer)arguments[6]).intValue());
+		}
+
+		if (_methodName48.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
 			return QuotaLocalServiceUtil.decrementQuota(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Long)arguments[2]).longValue());
 		}
 
-		if (_methodName48.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
+		if (_methodName49.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
 			return QuotaLocalServiceUtil.incrementQuota(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Long)arguments[2]).longValue());
@@ -314,4 +331,6 @@ public class QuotaLocalServiceClpInvoker {
 	private String[] _methodParameterTypes47;
 	private String _methodName48;
 	private String[] _methodParameterTypes48;
+	private String _methodName49;
+	private String[] _methodParameterTypes49;
 }

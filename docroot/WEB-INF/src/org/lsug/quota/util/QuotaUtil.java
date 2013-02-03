@@ -125,7 +125,7 @@ public class QuotaUtil {
 		long companyId, int start, int end, OrderByComparator orderByComparator)
 		throws PortalException, SystemException {
 
-		List<Quota> result = new ArrayList();
+		List<Quota> result = new ArrayList<Quota>();
 
 		List<Group> groups =
 			GroupLocalServiceUtil.getCompanyGroups(
@@ -137,17 +137,28 @@ public class QuotaUtil {
 					result.add(getGroupQuota(group.getGroupId()));
 				}
 				catch (NoSuchQuotaException nsqe) {
-					result.add(QuotaLocalServiceUtil.addQuota(
-						PortalUtil.getClassNameId(Group.class),
-						group.getGroupId(), 0, (long) 0, (long) 0, 0));
+					long classNameId = PortalUtil.getClassNameId(Group.class);
+					long classPK = group.getGroupId();
+					int quotaAlert = 0;
+					long quotaAssigned = 0;
+					long quotaUsed = 0;
+					int quotaStatus = 0;
+					
+					Quota quota = QuotaLocalServiceUtil.addQuota(
+						classNameId, classPK, quotaAlert, quotaAssigned, 
+						quotaUsed, quotaStatus);
+					
+					result.add(quota);
 				}
 			}
 		}
 
 		Collections.sort(result, orderByComparator);
+
 		if (result.size() < start) {
 			return null;
 		}
+
 		if (result.size() < end) {
 			return result.subList(start, result.size());
 		}

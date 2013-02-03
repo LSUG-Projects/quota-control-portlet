@@ -106,27 +106,33 @@ public class QuotaLocalServiceClp implements QuotaLocalService {
 
 		_methodParameterTypes17 = new String[] { "java.lang.String" };
 
-		_methodName19 = "getQuotaByClassNameIdClassPK";
+		_methodName19 = "addQuota";
 
-		_methodParameterTypes19 = new String[] { "long", "long" };
+		_methodParameterTypes19 = new String[] {
+				"long", "long", "int", "long", "long", "int"
+			};
 
-		_methodName20 = "updateQuota";
+		_methodName20 = "getQuotaByClassNameIdClassPK";
 
-		_methodParameterTypes20 = new String[] { "long", "long", "long" };
+		_methodParameterTypes20 = new String[] { "long", "long" };
 
 		_methodName21 = "updateQuota";
 
-		_methodParameterTypes21 = new String[] {
-				"long", "long", "long", "int", "long", "long"
+		_methodParameterTypes21 = new String[] { "long", "long", "long" };
+
+		_methodName22 = "updateQuota";
+
+		_methodParameterTypes22 = new String[] {
+				"long", "long", "long", "int", "long", "long", "int"
 			};
 
-		_methodName22 = "decrementQuota";
-
-		_methodParameterTypes22 = new String[] { "long", "long", "long" };
-
-		_methodName23 = "incrementQuota";
+		_methodName23 = "decrementQuota";
 
 		_methodParameterTypes23 = new String[] { "long", "long", "long" };
+
+		_methodName24 = "incrementQuota";
+
+		_methodParameterTypes24 = new String[] { "long", "long", "long" };
 	}
 
 	public org.lsug.quota.model.Quota addQuota(org.lsug.quota.model.Quota quota)
@@ -649,8 +655,8 @@ public class QuotaLocalServiceClp implements QuotaLocalService {
 		throw new UnsupportedOperationException();
 	}
 
-	public org.lsug.quota.model.Quota getQuotaByClassNameIdClassPK(
-		long classNameId, long classPK)
+	public org.lsug.quota.model.Quota addQuota(long classNameId, long classPK,
+		int quotaAlert, long quotaAssigned, long quotaUsed, int quotaStatus)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.lsug.quota.NoSuchQuotaException {
 		Object returnObj = null;
@@ -658,6 +664,52 @@ public class QuotaLocalServiceClp implements QuotaLocalService {
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName19,
 					_methodParameterTypes19,
+					new Object[] {
+						classNameId,
+						
+					classPK,
+						
+					quotaAlert,
+						
+					quotaAssigned,
+						
+					quotaUsed,
+						
+					quotaStatus
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof org.lsug.quota.NoSuchQuotaException) {
+				throw (org.lsug.quota.NoSuchQuotaException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (org.lsug.quota.model.Quota)ClpSerializer.translateOutput(returnObj);
+	}
+
+	public org.lsug.quota.model.Quota getQuotaByClassNameIdClassPK(
+		long classNameId, long classPK)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			org.lsug.quota.NoSuchQuotaException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName20,
+					_methodParameterTypes20,
 					new Object[] { classNameId, classPK });
 		}
 		catch (Throwable t) {
@@ -690,8 +742,8 @@ public class QuotaLocalServiceClp implements QuotaLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName20,
-					_methodParameterTypes20,
+			returnObj = _invokableLocalService.invokeMethod(_methodName21,
+					_methodParameterTypes21,
 					new Object[] { classNameId, classPK, fileSize });
 		}
 		catch (Throwable t) {
@@ -719,14 +771,14 @@ public class QuotaLocalServiceClp implements QuotaLocalService {
 
 	public org.lsug.quota.model.Quota updateQuota(long quotaId,
 		long classNameId, long classPK, int quotaAlert, long quotaAssigned,
-		long quotaUsed)
+		long quotaUsed, int quotaStatus)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.lsug.quota.NoSuchQuotaException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName21,
-					_methodParameterTypes21,
+			returnObj = _invokableLocalService.invokeMethod(_methodName22,
+					_methodParameterTypes22,
 					new Object[] {
 						quotaId,
 						
@@ -738,7 +790,9 @@ public class QuotaLocalServiceClp implements QuotaLocalService {
 						
 					quotaAssigned,
 						
-					quotaUsed
+					quotaUsed,
+						
+					quotaStatus
 					});
 		}
 		catch (Throwable t) {
@@ -771,8 +825,8 @@ public class QuotaLocalServiceClp implements QuotaLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName22,
-					_methodParameterTypes22,
+			returnObj = _invokableLocalService.invokeMethod(_methodName23,
+					_methodParameterTypes23,
 					new Object[] { classNameId, classPK, fileSize });
 		}
 		catch (Throwable t) {
@@ -805,8 +859,8 @@ public class QuotaLocalServiceClp implements QuotaLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName23,
-					_methodParameterTypes23,
+			returnObj = _invokableLocalService.invokeMethod(_methodName24,
+					_methodParameterTypes24,
 					new Object[] { classNameId, classPK, fileSize });
 		}
 		catch (Throwable t) {
@@ -879,4 +933,6 @@ public class QuotaLocalServiceClp implements QuotaLocalService {
 	private String[] _methodParameterTypes22;
 	private String _methodName23;
 	private String[] _methodParameterTypes23;
+	private String _methodName24;
+	private String[] _methodParameterTypes24;
 }
