@@ -32,8 +32,8 @@ public class QuotaImpl extends QuotaBaseImpl {
 	public QuotaImpl() {
 	}
 	
-	public boolean hasFreeMB(long mb) {
-		return this.getQuotaAssigned() - this.getQuotaUsed() >= mb;
+	public boolean hasFreeMB(long size) {
+		return this.getQuotaAssigned() - this.getQuotaUsed() >= size;
 	}
 	
 	public boolean isExceeded() {
