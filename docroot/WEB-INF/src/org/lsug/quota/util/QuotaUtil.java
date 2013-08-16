@@ -45,7 +45,7 @@ public class QuotaUtil {
 		final Group group = GroupLocalServiceUtil.getGroup(groupId);
 		final Company company = CompanyLocalServiceUtil.getCompany(group.getCompanyId());
 
-		QuotaLocalServiceUtil.decrementQuota(PortalUtil.getClassNameId(Group.class), group.getClassPK(), size);
+		QuotaLocalServiceUtil.decrementQuota(PortalUtil.getClassNameId(Group.class), group.getGroupId(), size);
 
 		QuotaLocalServiceUtil.decrementQuota(PortalUtil.getClassNameId(Company.class), company.getCompanyId(), size);
 	}
@@ -55,7 +55,7 @@ public class QuotaUtil {
 		final Group group = GroupLocalServiceUtil.getGroup(groupId);
 		final Company company = CompanyLocalServiceUtil.getCompany(group.getCompanyId());
 
-		QuotaLocalServiceUtil.incrementQuota(PortalUtil.getClassNameId(Group.class), group.getClassPK(), size);
+		QuotaLocalServiceUtil.incrementQuota(PortalUtil.getClassNameId(Group.class), group.getGroupId(), size);
 
 		QuotaLocalServiceUtil.incrementQuota(PortalUtil.getClassNameId(Company.class), company.getCompanyId(), size);
 	}
@@ -219,7 +219,7 @@ public class QuotaUtil {
 		final Group group = GroupLocalServiceUtil.getGroup(groupId);
 
 		return QuotaLocalServiceUtil.getQuotaByClassNameIdClassPK(PortalUtil.getClassNameId(Group.class),
-				group.getClassPK());
+				group.getGroupId());
 	}
 
 	private static boolean isUnlimitedQuota(Quota quota) {

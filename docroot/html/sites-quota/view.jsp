@@ -42,7 +42,7 @@
 	<liferay-ui:search-container-column-text name="quota-alert"
 		value="${quota.getQuotaAlert()}" />
 
-	<liferay-ui:search-container-column-text name="quota-assigned-MB" orderable="true" 
+	<liferay-ui:search-container-column-text name="quota-assigned" orderable="true" 
 		orderableProperty="quotaAssigned">
 		
 		<fmt:formatNumber var="quotaAssigned" value="${quota.getQuotaAssigned() / 1024 / 1024}" maxFractionDigits="0" />
@@ -50,15 +50,20 @@
 
 	</liferay-ui:search-container-column-text>
 
-	<liferay-ui:search-container-column-text name="quota-used"
-		value="${quota.getQuotaUsed()}" orderable="true"
-		orderableProperty="quotaUsed" />
+	<liferay-ui:search-container-column-text name="quota-used" orderable="true"
+		orderableProperty="quotaUsed">
+			
+		<fmt:formatNumber var="quotaUsed" value="${quota.getQuotaUsed() / 1024 / 1024}" maxFractionDigits="3" />
+		<c:out value="${quotaUsed}"></c:out>
+			
+	</liferay-ui:search-container-column-text>
 
 	<liferay-ui:search-container-column-text name="edit">
 				
 		<portlet:renderURL var="editURL">
 			<portlet:param name="jspPage" value="/html/sites-quota/edit.jsp" />
 			<portlet:param name="quotaId" value="${quota.getQuotaId()}" />
+			<portlet:param name="tabs2" value="${tabs2}" />
 		</portlet:renderURL>
 
 		<liferay-ui:icon image="edit" url="${editURL}" />

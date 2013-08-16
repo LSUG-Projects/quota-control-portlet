@@ -112,7 +112,11 @@ public class SitesQuotaPortlet extends MVCPortlet {
 	}
 
 	public Quota updateQuota(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-
+		
+		// Parametro para identificar la pestaña en la que estamos
+		final String tabs2 = ParamUtil.getString(actionRequest, "tabs2", "sites");
+		actionResponse.setRenderParameter("tabs2", tabs2);
+		
 		// Identificador quota
 		final long quotaId = ParamUtil.getLong(actionRequest, "quotaId");
 		final long classNameId = PortalUtil.getClassNameId(Group.class);

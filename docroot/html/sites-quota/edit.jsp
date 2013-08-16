@@ -20,6 +20,7 @@
 <%@ include file="/html/sites-quota/init.jsp"%>
 
 <%
+final String tabs2 = ParamUtil.getString(request, "tabs2", "sites");
 final long quotaId = ParamUtil.getLong(request, "quotaId");
 final Quota quota = QuotaLocalServiceUtil.getQuota(quotaId);
 %>
@@ -31,6 +32,9 @@ final Quota quota = QuotaLocalServiceUtil.getQuota(quotaId);
 </portlet:actionURL>
 
 <aui:form action="<%=editURL%>" method="post" name="fm">
+	
+	<%-- Campo oculto para saber en que pestaña estabamos y volver alli --%>
+	<input type="hidden" value="<%=tabs2 %>" name="<portlet:namespace/>tabs2"/>
 
 	<aui:column cssClass="edit-column">
 		<aui:input label="quota-status" name="quotaStatus" type="checkbox" 
@@ -45,7 +49,7 @@ final Quota quota = QuotaLocalServiceUtil.getQuota(quotaId);
 	</aui:column>
 	
 	<aui:column cssClass="edit-column">
-		<aui:input label="quota-assigned-MB" name="quotaAssigned" value="<%=(quota.getQuotaAssigned() / 1024) / 1024%>">
+		<aui:input label="quota-assigned" name="quotaAssigned" value="<%=(quota.getQuotaAssigned() / 1024) / 1024%>">
 			<%-- Validar que solo se puedan introducir digitos --%>	
 			<aui:validator name="digits"/>	
 		</aui:input>
