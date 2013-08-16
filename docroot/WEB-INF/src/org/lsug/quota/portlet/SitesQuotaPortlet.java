@@ -121,8 +121,7 @@ public class SitesQuotaPortlet extends MVCPortlet {
 		final int quotaStatus = ParamUtil.getBoolean(actionRequest, "quotaStatus", Boolean.FALSE) == Boolean.FALSE ? 0
 				: 1;
 		// Numero a partir del cual se envia un correo para enviar un aviso del espacio utilizado y disponible
-		final int quotaAlert = ParamUtil.getBoolean(actionRequest, "quotaAlert", Boolean.FALSE) == Boolean.FALSE ? 0
-				: 1;
+		final int quotaAlert = ParamUtil.getInteger(actionRequest, "quotaAlert", 0);
 		// Tamaño asignado a un sitio
 		final long quotaAssigned = ParamUtil.getLong(actionRequest, "quotaAssigned");
 		// Pasar los megas a bytes

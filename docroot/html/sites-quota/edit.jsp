@@ -45,7 +45,7 @@ final Quota quota = QuotaLocalServiceUtil.getQuota(quotaId);
 	</aui:column>
 	
 	<aui:column cssClass="edit-column">
-		<aui:input label="quota-assigned" name="quotaAssigned" value="<%=quota.getQuotaAssigned()%>">
+		<aui:input label="quota-assigned-MB" name="quotaAssigned" value="<%=(quota.getQuotaAssigned() / 1024) / 1024%>">
 			<%-- Validar que solo se puedan introducir digitos --%>	
 			<aui:validator name="digits"/>	
 		</aui:input>

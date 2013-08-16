@@ -16,6 +16,7 @@
 
 <%@ include file="/html/sites-quota/init.jsp"%>
 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <liferay-portlet:renderURL var="portletURL">
 	<portlet:param name="tabs2" value="${tabs2}" />
@@ -41,9 +42,13 @@
 	<liferay-ui:search-container-column-text name="quota-alert"
 		value="${quota.getQuotaAlert()}" />
 
-	<liferay-ui:search-container-column-text name="quota-assigned" 
-		value="${quota.getQuotaAssigned()}" orderable="true" 
-		orderableProperty="quotaAssigned" />
+	<liferay-ui:search-container-column-text name="quota-assigned-MB" orderable="true" 
+		orderableProperty="quotaAssigned">
+		
+		<fmt:formatNumber var="quotaAssigned" value="${quota.getQuotaAssigned() / 1024 / 1024}" maxFractionDigits="0" />
+		<c:out value="${quotaAssigned}"></c:out>
+
+	</liferay-ui:search-container-column-text>
 
 	<liferay-ui:search-container-column-text name="quota-used"
 		value="${quota.getQuotaUsed()}" orderable="true"
