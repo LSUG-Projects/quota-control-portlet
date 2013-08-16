@@ -298,7 +298,7 @@ public class QuotaWrapper implements Quota, ModelWrapper<Quota> {
 		return new QuotaWrapper((Quota)_quota.clone());
 	}
 
-	public int compareTo(org.lsug.quota.model.Quota quota) {
+	public int compareTo(Quota quota) {
 		return _quota.compareTo(quota);
 	}
 
@@ -307,11 +307,11 @@ public class QuotaWrapper implements Quota, ModelWrapper<Quota> {
 		return _quota.hashCode();
 	}
 
-	public com.liferay.portal.model.CacheModel<org.lsug.quota.model.Quota> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<Quota> toCacheModel() {
 		return _quota.toCacheModel();
 	}
 
-	public org.lsug.quota.model.Quota toEscapedModel() {
+	public Quota toEscapedModel() {
 		return new QuotaWrapper(_quota.toEscapedModel());
 	}
 
@@ -329,8 +329,8 @@ public class QuotaWrapper implements Quota, ModelWrapper<Quota> {
 		_quota.persist();
 	}
 
-	public boolean hasFreeMB(long mb) {
-		return _quota.hasFreeMB(mb);
+	public boolean hasFreeMB(long size) {
+		return _quota.hasFreeMB(size);
 	}
 
 	public boolean isExceeded() {

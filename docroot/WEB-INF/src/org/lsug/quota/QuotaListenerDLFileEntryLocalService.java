@@ -29,20 +29,19 @@ public class QuotaListenerDLFileEntryLocalService extends DLFileEntryLocalServic
 	public DLFileEntry addFileEntry(long userId, long groupId, long repositoryId, long folderId, String sourceFileName,
 			String mimeType, String title, String description, String changeLog, long fileEntryTypeId,
 			Map<String, Fields> fieldsMap, File file, InputStream is, long size, ServiceContext serviceContext)
-			throws PortalException, SystemException {
-
-		if (!QuotaUtil.hasQuota(groupId, userId, size))
-			throw new QuotaExceededException();
+			throws PortalException, SystemException {	
 
 		DLFileEntry dlFileEntry = super.addFileEntry(userId, groupId, repositoryId, folderId, sourceFileName, mimeType,
 				title, description, changeLog, fileEntryTypeId, fieldsMap, file, is, size, serviceContext);
-
+		
 		try {
-			QuotaUtil.decreaseQuota(groupId, userId, size);
+			if (QuotaUtil.hasQuota(groupId, userId, size)){
+				QuotaUtil.decreaseQuota(groupId, userId, size);
+			}			
 		} catch (NoSuchQuotaException e) {
 			LOGGER.error("Not found a Quota with groupId: " + groupId + " and userId : "+userId);
 		}
-
+	
 		return dlFileEntry;
 	}
 
@@ -91,17 +90,20 @@ public class QuotaListenerDLFileEntryLocalService extends DLFileEntryLocalServic
 
 		DLFileEntry fileEntry = DLFileEntryLocalServiceUtil.getFileEntry(fileEntryId);
 		long groupId = fileEntry.getGroupId();
-		QuotaUtil.increaseQuota(groupId, userId, size);
-
-		if (!QuotaUtil.hasQuota(groupId, userId, size))
-			throw new QuotaExceededException();
-
+		try {			
+			if (QuotaUtil.hasQuota(groupId, userId, size)) {
+				QuotaUtil.increaseQuota(groupId, userId, size);
+			}			
+		} catch (NoSuchQuotaException e) {
+			LOGGER.error("Not found a Quota with groupId: " + groupId + " and userId : "+userId);
+		}
+	
 		DLFileEntry dlFileEntry = super.updateFileEntry(userId, fileEntryId, sourceFileName, mimeType, title,
 				description, changeLog, majorVersion, fileEntryTypeId, fieldsMap, file, is, size, serviceContext);
 
 		try {
 			QuotaUtil.decreaseQuota(groupId, userId, dlFileEntry.getSize());
-		} catch (NoSuchQuotaException e) {
+		} catch (NoSuchQuotaException e1) {
 			LOGGER.error("Not found a Quota with groupId: " + groupId + " and userId : "+userId);
 		}
 		
