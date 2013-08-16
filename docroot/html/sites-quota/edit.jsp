@@ -1,4 +1,3 @@
-<%@page import="org.lsug.quota.service.QuotaLocalServiceUtil"%>
 <%
 	/**
 	 * Copyright (c) 2013 Liferay Spain User Group All rights reserved.
@@ -15,11 +14,14 @@
 	 */
 %>
 
+<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
+<%@page import="org.lsug.quota.service.QuotaLocalServiceUtil"%>
+
 <%@ include file="/html/sites-quota/init.jsp"%>
 
 <%
-	long quotaId = ParamUtil.getLong(request, "quotaId");
-	Quota quota = QuotaLocalServiceUtil.getQuota(quotaId);
+final long quotaId = ParamUtil.getLong(request, "quotaId");
+final Quota quota = QuotaLocalServiceUtil.getQuota(quotaId);
 %>
 
 <portlet:actionURL var="editURL">
@@ -31,22 +33,26 @@
 <aui:form action="<%=editURL%>" method="post" name="fm">
 
 	<aui:column cssClass="edit-column">
-		<aui:input label="quota-status" name="quotaStatus"
-			value="<%=quota.getQuotaStatus()%>" />
-	</aui:column>
+		<aui:input label="quota-status" name="quotaStatus" type="checkbox" 
+			value="<%=quota.getQuotaStatus() == 0 ? Boolean.FALSE : Boolean.TRUE%>" />				
+	</aui:column>	
+	
 	<aui:column cssClass="edit-column">
-		<aui:input label="quota-alert" name="quotaAlert"
-			value="<%=quota.getQuotaAlert()%>" />
+		<aui:input label="quota-alert" name="quotaAlert" value="<%=quota.getQuotaAlert()%>">
+			<%-- Validar que solo se puedan introducir digitos --%>	
+			<aui:validator name="digits"/>	
+		</aui:input>			
 	</aui:column>
+	
 	<aui:column cssClass="edit-column">
-		<aui:input label="quota-assigned" name="quotaAssigned"
-			value="<%=quota.getQuotaAssigned()%>" />
+		<aui:input label="quota-assigned" name="quotaAssigned" value="<%=quota.getQuotaAssigned()%>">
+			<%-- Validar que solo se puedan introducir digitos --%>	
+			<aui:validator name="digits"/>	
+		</aui:input>
 	</aui:column>
-	<aui:column cssClass="edit-column">
-		<aui:input label="quota-used" name="quotaUsed"
-			value="<%=quota.getQuotaUsed()%>" />
-	</aui:column>
+		
 	<aui:button-row cssClass="button-row">
 		<aui:button type="submit" value="update" />
 	</aui:button-row>
+	
 </aui:form>

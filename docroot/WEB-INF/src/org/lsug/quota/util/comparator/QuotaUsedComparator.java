@@ -7,6 +7,11 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 
 public class QuotaUsedComparator extends OrderByComparator {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8884162930859816365L;
+	
 	public static String ORDER_BY_ASC = "quotaUsed ASC";
 	public static String ORDER_BY_DESC = "quotaUsed DESC";
 	public static String[] ORDER_BY_FIELDS = {

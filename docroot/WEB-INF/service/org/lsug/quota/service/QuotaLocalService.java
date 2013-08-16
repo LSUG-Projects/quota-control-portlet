@@ -259,7 +259,7 @@ public interface QuotaLocalService extends BaseLocalService,
 
 	public org.lsug.quota.model.Quota updateQuota(long quotaId,
 		long classNameId, long classPK, int quotaAlert, long quotaAssigned,
-		long quotaUsed, int quotaStatus)
+		int quotaStatus)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.lsug.quota.NoSuchQuotaException;
 

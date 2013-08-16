@@ -58,7 +58,6 @@ public class ServerQuotaPortlet extends com.liferay.util.bridges.mvc.MVCPortlet 
 		searchContainer.setDelta(paramDelta);
 		searchContainer.setDeltaConfigurable(false);
 
-		List<Quota> listQuotas = new ArrayList<Quota>();
 		List<ServerVO> listServerVOs = new ArrayList<ServerVO>();
 		int listQuotasCount = 0;
 		try {
