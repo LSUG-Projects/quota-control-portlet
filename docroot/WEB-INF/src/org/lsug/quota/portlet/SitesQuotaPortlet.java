@@ -49,7 +49,7 @@ public class SitesQuotaPortlet extends MVCPortlet {
 	@Override
 	public void doView(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
 		
-		// Parametro para identificar la pesta�a en la que estamos
+		// Parametro para identificar la pestaña en la que estamos
 		final String tabs2 = ParamUtil.getString(renderRequest, "tabs2", "sites");
 		
 		final int cur = ParamUtil.getInteger(renderRequest, "cur", 0);
@@ -78,7 +78,7 @@ public class SitesQuotaPortlet extends MVCPortlet {
 			// Identificador instancia de Liferay
 			final long companyId = PortalUtil.getCompanyId(renderRequest);
 			
-			// Si la pesta�a es sites obtenemos los sitios web de una instancia
+			// Si la pestaña es sites obtenemos los sitios web de una instancia
 			if (tabs2.equalsIgnoreCase("sites")) {
 				final List<Quota> results = QuotaUtil.getSitesQuotas(companyId, searchContainer.getStart(), searchContainer.getEnd(), orderByComparator);
 				final int total = QuotaUtil.getSitesQuotasCount(companyId);
@@ -122,7 +122,28 @@ public class SitesQuotaPortlet extends MVCPortlet {
 				: 1;
 		// Numero a partir del cual se envia un correo para enviar un aviso del espacio utilizado y disponible
 		final int quotaAlert = ParamUtil.getInteger(actionRequest, "quotaAlert", 0);
-		// Tama�o asignado a un sitio
+		// Tamaño asignado a un sitio
+		final long quotaAssigned = ParamUtil.getLong(actionRequest, "quotaAssigned");
+		// Pasar los megas a bytes
+		final long quotaAssignedBytes = quotaAssigned * 1024 * 1024;
+
+		return QuotaLocalServiceUtil.updateQuota(quotaId, classNameId, classPK, quotaAlert, quotaAssignedBytes,
+				quotaStatus);
+	}
+	
+	
+	public Quota updateQuotaUser(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
+
+		// Identificador quota
+		final long quotaId = ParamUtil.getLong(actionRequest, "quotaId");
+		final long classNameId = PortalUtil.getClassNameId(User.class);
+		final long classPK = ParamUtil.getLong(actionRequest, "classPK");
+		// Cuota activa para indicar si una cuota esta activa o no
+		final int quotaStatus = ParamUtil.getBoolean(actionRequest, "quotaStatus", Boolean.FALSE) == Boolean.FALSE ? 0
+				: 1;
+		// Numero a partir del cual se envia un correo para enviar un aviso del espacio utilizado y disponible
+		final int quotaAlert = ParamUtil.getInteger(actionRequest, "quotaAlert", 0);
+		// Tamaño asignado a un sitio
 		final long quotaAssigned = ParamUtil.getLong(actionRequest, "quotaAssigned");
 		// Pasar los megas a bytes
 		final long quotaAssignedBytes = quotaAssigned * 1024 * 1024;
