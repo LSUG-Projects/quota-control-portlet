@@ -130,26 +130,5 @@ public class SitesQuotaPortlet extends MVCPortlet {
 		return QuotaLocalServiceUtil.updateQuota(quotaId, classNameId, classPK, quotaAlert, quotaAssignedBytes,
 				quotaStatus);
 	}
-	
-	
-	public Quota updateQuotaUser(ActionRequest actionRequest, ActionResponse actionResponse) throws Exception {
-
-		// Identificador quota
-		final long quotaId = ParamUtil.getLong(actionRequest, "quotaId");
-		final long classNameId = PortalUtil.getClassNameId(User.class);
-		final long classPK = ParamUtil.getLong(actionRequest, "classPK");
-		// Cuota activa para indicar si una cuota esta activa o no
-		final int quotaStatus = ParamUtil.getBoolean(actionRequest, "quotaStatus", Boolean.FALSE) == Boolean.FALSE ? 0
-				: 1;
-		// Numero a partir del cual se envia un correo para enviar un aviso del espacio utilizado y disponible
-		final int quotaAlert = ParamUtil.getInteger(actionRequest, "quotaAlert", 0);
-		// Tamaño asignado a un sitio
-		final long quotaAssigned = ParamUtil.getLong(actionRequest, "quotaAssigned");
-		// Pasar los megas a bytes
-		final long quotaAssignedBytes = quotaAssigned * 1024 * 1024;
-
-		return QuotaLocalServiceUtil.updateQuota(quotaId, classNameId, classPK, quotaAlert, quotaAssignedBytes,
-				quotaStatus);
-	}
 
 }
