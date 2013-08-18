@@ -36,24 +36,18 @@ final Quota quota = QuotaLocalServiceUtil.getQuota(quotaId);
 	<%-- Campo oculto para saber en que pestaña estabamos y volver alli --%>
 	<input type="hidden" value="<%=tabs2 %>" name="<portlet:namespace/>tabs2"/>
 
-	<aui:column cssClass="edit-column">
-		<aui:input label="quota-status" name="quotaStatus" type="checkbox" 
-			value="<%=quota.getQuotaStatus() == 0 ? Boolean.FALSE : Boolean.TRUE%>" />				
-	</aui:column>	
-	
-	<aui:column cssClass="edit-column">
-		<aui:input label="quota-alert" name="quotaAlert" value="<%=quota.getQuotaAlert()%>">
-			<%-- Validar que solo se puedan introducir digitos --%>	
-			<aui:validator name="digits"/>	
-		</aui:input>			
-	</aui:column>
-	
-	<aui:column cssClass="edit-column">
-		<aui:input label="quota-assigned" name="quotaAssigned" value="<%=(quota.getQuotaAssigned() / 1024) / 1024%>">
-			<%-- Validar que solo se puedan introducir digitos --%>	
-			<aui:validator name="digits"/>	
-		</aui:input>
-	</aui:column>
+	<aui:input label="quota-status" name="quotaStatus" type="checkbox" 
+		value="<%=quota.getQuotaStatus() == 0 ? Boolean.FALSE : Boolean.TRUE%>" />				
+
+	<aui:input label="quota-alert" name="quotaAlert" value="<%=quota.getQuotaAlert()%>">
+		<%-- Validar que solo se puedan introducir digitos --%>	
+		<aui:validator name="digits"/>	
+	</aui:input>			
+
+	<aui:input label="quota-assigned" name="quotaAssigned" value="<%=(quota.getQuotaAssigned() / 1024) / 1024%>">
+		<%-- Validar que solo se puedan introducir digitos --%>	
+		<aui:validator name="digits"/>	
+	</aui:input>
 		
 	<aui:button-row cssClass="button-row">
 		<aui:button type="submit" value="update" />

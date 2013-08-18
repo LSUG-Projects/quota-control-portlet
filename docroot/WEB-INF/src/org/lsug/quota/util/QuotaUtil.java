@@ -30,12 +30,15 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.documentlibrary.service.DLFileEntryLocalServiceUtil;
 
 public class QuotaUtil {
 
@@ -79,8 +82,8 @@ public class QuotaUtil {
 	public static Quota getCompanyQuota(long companyId) throws PortalException, SystemException {
 
 		try {
-			final Quota quota = QuotaLocalServiceUtil.getQuotaByClassNameIdClassPK(PortalUtil.getClassNameId(Company.class),
-					companyId);
+			final Quota quota = QuotaLocalServiceUtil.getQuotaByClassNameIdClassPK(
+					PortalUtil.getClassNameId(Company.class), companyId);
 
 			return quota;
 		} catch (NoSuchQuotaException nsqe) {
@@ -106,46 +109,13 @@ public class QuotaUtil {
 
 		return orderByComparator;
 	}
-	@SuppressWarnings("unchecked")
+
 	public static List<Quota> getSitesQuotas(long companyId, int start, int end, OrderByComparator orderByComparator)
 			throws PortalException, SystemException {
 
-		List<Quota> result = new ArrayList<Quota>();
-		
 		final long[] classNameIds = { ClassNameLocalServiceUtil.getClassNameId(Group.class.getName()) };
 
-		final List<Group> groups = GroupLocalServiceUtil.search(companyId, classNameIds, null, null, null,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-		
-		for (Group group : groups) {
-			try {
-				result.add(getGroupQuota(group.getGroupId()));
-			} catch (NoSuchQuotaException nsqe) {
-				
-				final long classNameId = PortalUtil.getClassNameId(Group.class);
-				final long classPK = group.getGroupId();
-				final int quotaAlert = 0;
-				final long quotaAssigned = 0;
-				final long quotaUsed = 0;
-				final int quotaStatus = 0;
-
-				final Quota quota = QuotaLocalServiceUtil.addQuota(classNameId, classPK, quotaAlert, quotaAssigned, quotaUsed, quotaStatus);
-				
-				result.add(quota);
-			}
-		}
-
-		Collections.sort(result, orderByComparator);
-
-		if (result.size() < start) {
-			return null;
-		}
-
-		if (result.size() < end) {
-			return result.subList(start, result.size());
-		} else {
-			return result.subList(start, end);
-		}
+		return getGroupsQuotas(companyId, start, end, orderByComparator, classNameIds);
 
 	}
 
@@ -156,46 +126,12 @@ public class QuotaUtil {
 		return GroupLocalServiceUtil.searchCount(companyId, classNameIds, null, null, null);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static List<Quota> getSitesUsersQuotas(long companyId, int start, int end,
 			OrderByComparator orderByComparator) throws PortalException, SystemException {
 
-		List<Quota> result = new ArrayList<Quota>();
-
 		final long[] classNameIds = { ClassNameLocalServiceUtil.getClassNameId(User.class.getName()) };
 
-		final List<Group> groups = GroupLocalServiceUtil.search(companyId, classNameIds, null, null, null,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-
-		for (Group group : groups) {
-			try {
-				result.add(getGroupQuota(group.getGroupId()));
-			} catch (NoSuchQuotaException nsqe) {
-				long classNameId = PortalUtil.getClassNameId(Group.class);
-				long classPK = group.getGroupId();
-				int quotaAlert = 0;
-				long quotaAssigned = 0;
-				long quotaUsed = 0;
-				int quotaStatus = 0;
-
-				final Quota quota = QuotaLocalServiceUtil.addQuota(classNameId, classPK, quotaAlert, quotaAssigned,
-						quotaUsed, quotaStatus);
-
-				result.add(quota);
-			}
-		}
-
-		Collections.sort(result, orderByComparator);
-
-		if (result.size() < start) {
-			return null;
-		}
-
-		if (result.size() < end) {
-			return result.subList(start, result.size());
-		} else {
-			return result.subList(start, end);
-		}
+		return getGroupsQuotas(companyId, start, end, orderByComparator, classNameIds);
 
 	}
 
@@ -205,6 +141,124 @@ public class QuotaUtil {
 
 		return GroupLocalServiceUtil.searchCount(companyId, classNameIds, null, null, null);
 	}
+
+	/**
+	 * Calculate Group quotas
+	 * 
+	 * @param companyId
+	 * @param start
+	 * @param end
+	 * @param orderByComparator
+	 * @param classNameIds
+	 * @return
+	 * @throws SystemException
+	 * @throws PortalException
+	 * @throws NoSuchQuotaException
+	 */
+	@SuppressWarnings("unchecked")
+	private static List<Quota> getGroupsQuotas(long companyId, int start, int end, OrderByComparator orderByComparator,
+			final long[] classNameIds) throws SystemException, PortalException, NoSuchQuotaException {
+		List<Quota> result = new ArrayList<Quota>();
+
+		final List<Group> groups = GroupLocalServiceUtil.search(companyId, classNameIds, null, null, null,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+		for (Group group : groups) {
+			try {
+				result.add(getGroupQuota(group.getGroupId()));
+			} catch (NoSuchQuotaException e) {
+				final long classNameId = PortalUtil.getClassNameId(Group.class);
+				final long classPK = group.getGroupId();
+				final int quotaAlert = 0;
+				final long quotaAssigned = 0;
+				final long quotaUsed = 0;
+				final int quotaStatus = 0;
+
+				final Quota quota = QuotaLocalServiceUtil.addQuota(classNameId, classPK, quotaAlert, quotaAssigned,
+						quotaUsed, quotaStatus);
+
+				result.add(quota);
+			}
+		}
+
+		if (Validator.isNotNull(orderByComparator)) {
+			Collections.sort(result, orderByComparator);
+		}
+
+		final int resutlsSize = result.size();
+
+		if (start == QueryUtil.ALL_POS) {
+			start = 0;
+		}
+
+		if (end == QueryUtil.ALL_POS) {
+			end = resutlsSize;
+		}
+
+		if (resutlsSize < start) {
+			return null;
+		}
+
+		if (resutlsSize < end) {
+			return result.subList(start, resutlsSize);
+		} else {
+			return result.subList(start, end);
+		}
+	}
+
+	/**
+	 * Calculate current used quota from an instance
+	 * 
+	 * @param companyId
+	 * @param quotaUsed
+	 * @return
+	 * @throws SystemException
+	 */
+	public static long calculateServerUsedQuota(final long companyId) throws SystemException {
+		long usedQuota = 0;
+
+		final long[] classNameIds = { ClassNameLocalServiceUtil.getClassNameId(Group.class.getName()),
+				ClassNameLocalServiceUtil.getClassNameId(User.class.getName()) };
+
+		try {
+			final List<Quota> quotas = getGroupsQuotas(companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null,
+					classNameIds);
+
+			for (Quota quota : quotas) {
+				usedQuota += quota.getQuotaUsed();
+			}
+
+			return usedQuota;
+		} catch (NoSuchQuotaException e) {
+			return usedQuota;
+		} catch (PortalException e) {
+			return usedQuota;
+		} catch (SystemException e) {
+			return usedQuota;
+		}
+	}
+
+	/**
+	 * Calculate current used quota from a site
+	 * 
+	 * @param groupId
+	 * @param quotaUsed
+	 * @return
+	 * @throws SystemException
+	 */
+	public static long calculateSiteUsedQuota(final long groupId) throws SystemException {
+		long quota = 0;
+
+		final List<DLFileEntry> fileEntries = DLFileEntryLocalServiceUtil.getGroupFileEntries(groupId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+
+		for (DLFileEntry fileEntry : fileEntries) {
+			quota += fileEntry.getSize();
+		}
+
+		return quota;
+	}
+
 	private static Quota getCompanyQuotaByGroupId(long groupId) throws PortalException, SystemException {
 
 		final Group group = GroupLocalServiceUtil.getGroup(groupId);

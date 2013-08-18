@@ -74,7 +74,7 @@ public class QuotaLocalServiceImpl extends QuotaLocalServiceBaseImpl {
 
 	public Quota updateQuota(
 		long quotaId, long classNameId, long classPK, int quotaAlert,
-		long quotaAssigned, int quotaStatus)
+		long quotaAssigned, long quotaUsed, int quotaStatus)
 		throws NoSuchQuotaException, SystemException {
 
 		Quota quota = quotaPersistence.fetchByPrimaryKey(quotaId);
@@ -83,7 +83,7 @@ public class QuotaLocalServiceImpl extends QuotaLocalServiceBaseImpl {
 		quota.setClassPK(classPK);
 		quota.setQuotaAlert(quotaAlert);
 		quota.setQuotaAssigned(quotaAssigned);
-		//quota.setQuotaUsed(quotaUsed);
+		quota.setQuotaUsed(quotaUsed);
 		quota.setQuotaStatus(quotaStatus);
 
 		return quotaPersistence.update(quota, false);

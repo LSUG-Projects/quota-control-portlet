@@ -15,6 +15,7 @@ import org.lsug.quota.NoSuchQuotaException;
 import org.lsug.quota.model.Quota;
 import org.lsug.quota.server.util.ServerVO;
 import org.lsug.quota.service.QuotaLocalServiceUtil;
+import org.lsug.quota.util.QuotaUtil;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
@@ -32,11 +33,9 @@ import com.liferay.portal.util.PortalUtil;
 public class ServerQuotaPortlet extends com.liferay.util.bridges.mvc.MVCPortlet {
 
 	@Override
-	public void doView(RenderRequest renderRequest,
-			RenderResponse renderResponse) throws IOException, PortletException {
+	public void doView(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException, PortletException {
 
-		final String cmd = ParamUtil.getString(renderRequest, Constants.CMD,
-				StringPool.BLANK);
+		final String cmd = ParamUtil.getString(renderRequest, Constants.CMD, StringPool.BLANK);
 
 		if (cmd.equals(Constants.ADD) || cmd.equals(Constants.UPDATE)) {
 			editQuota(renderRequest, renderResponse);
@@ -46,15 +45,14 @@ public class ServerQuotaPortlet extends com.liferay.util.bridges.mvc.MVCPortlet 
 
 	}
 
-	private void listServerQuotas(RenderRequest renderRequest,
-			RenderResponse renderResponse) throws IOException, PortletException {
+	private void listServerQuotas(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException,
+			PortletException {
 		int cur = ParamUtil.getInteger(renderRequest, "cur", 0);
 		int paramDelta = ParamUtil.getInteger(renderRequest, "delta", 10);
 		PortletURL portletURL = renderResponse.createRenderURL();
 
-		SearchContainer<ServerVO> searchContainer = new SearchContainer<ServerVO>(
-				renderRequest, null, null, SearchContainer.DEFAULT_CUR_PARAM,
-				cur, paramDelta, portletURL, null, null);
+		SearchContainer<ServerVO> searchContainer = new SearchContainer<ServerVO>(renderRequest, null, null,
+				SearchContainer.DEFAULT_CUR_PARAM, cur, paramDelta, portletURL, null, null);
 		searchContainer.setDelta(paramDelta);
 		searchContainer.setDeltaConfigurable(false);
 
@@ -62,8 +60,7 @@ public class ServerQuotaPortlet extends com.liferay.util.bridges.mvc.MVCPortlet 
 		int listQuotasCount = 0;
 		try {
 			// TODO: Cambiar por count
-			listQuotasCount = QuotaLocalServiceUtil.getQuotas(
-					QueryUtil.ALL_POS, QueryUtil.ALL_POS).size();
+			listQuotasCount = QuotaLocalServiceUtil.getQuotas(QueryUtil.ALL_POS, QueryUtil.ALL_POS).size();
 
 			List<Company> listCompany = CompanyLocalServiceUtil.getCompanies();
 
@@ -71,10 +68,8 @@ public class ServerQuotaPortlet extends com.liferay.util.bridges.mvc.MVCPortlet 
 			ServerVO serverVO = null;
 			for (Company company : listCompany) {
 				try {
-					Quota quota = QuotaLocalServiceUtil
-							.getQuotaByClassNameIdClassPK(PortalUtil
-									.getClassNameId(Company.class.getName()),
-									company.getCompanyId());
+					Quota quota = QuotaLocalServiceUtil.getQuotaByClassNameIdClassPK(
+							PortalUtil.getClassNameId(Company.class.getName()), company.getCompanyId());
 					serverVO = new ServerVO(quota);
 				} catch (NoSuchQuotaException e) {
 					serverVO = new ServerVO(company);
@@ -90,16 +85,15 @@ public class ServerQuotaPortlet extends com.liferay.util.bridges.mvc.MVCPortlet 
 		super.doView(renderRequest, renderResponse);
 	}
 
-	private void editQuota(RenderRequest renderRequest,
-			RenderResponse renderResponse) throws IOException, PortletException {
+	private void editQuota(RenderRequest renderRequest, RenderResponse renderResponse) throws IOException,
+			PortletException {
 		Quota quota = null;
 		final long quotaId = ParamUtil.getLong(renderRequest, "quotaId", 0);
 		if (quotaId == 0) {
 			quota = QuotaLocalServiceUtil.createQuota(0);
 		} else {
 			try {
-				quota = QuotaLocalServiceUtil.getQuota(ParamUtil.getLong(
-						renderRequest, "quotaId"));
+				quota = QuotaLocalServiceUtil.getQuota(ParamUtil.getLong(renderRequest, "quotaId"));
 			} catch (PortalException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -111,26 +105,32 @@ public class ServerQuotaPortlet extends com.liferay.util.bridges.mvc.MVCPortlet 
 
 		renderRequest.setAttribute("quota", quota);
 
-		include("/html/server-quota/edit_quota.jsp", renderRequest,
-				renderResponse);
+		include("/html/server-quota/edit.jsp", renderRequest, renderResponse);
 	}
 
-	public void saveServerQuota(final ActionRequest req,
-			final ActionResponse res) throws SystemException {
+	public void saveServerQuota(final ActionRequest req, final ActionResponse res) throws SystemException {
 
-		final String cmd = ParamUtil.getString(req, Constants.CMD,
-				StringPool.BLANK);
-
+		final String cmd = ParamUtil.getString(req, Constants.CMD, StringPool.BLANK);
 		final long quotaId = ParamUtil.getLong(req, "quotaId");
-
 		final long classPK = ParamUtil.getLong(req, "classPK");
+		final int quotaStatus = ParamUtil.getBoolean(req, "quotaStatus", Boolean.FALSE) == Boolean.FALSE ? 0 : 1;
+		final boolean quotaUnlimited = ParamUtil.getBoolean(req, "quotaUnlimited", Boolean.FALSE);
 
-		final int quotaStatus = ParamUtil.getInteger(req, "quotaStatus");
-
-		final long quotaAssigned = ParamUtil.getLong(req, "quotaAssigned");
+		long quotaAssigned = ParamUtil.getLong(req, "quotaAssigned");
+		if (quotaUnlimited) {
+			quotaAssigned = org.lsug.quota.util.Constants.UNLIMITED_QUOTA;
+		} else {
+			quotaAssigned = quotaAssigned * 1024 * 1024;
+		}
 
 		final int quotaAlert = ParamUtil.getInteger(req, "quotaAlert");
 
+		long quotaUsed = 0;
+		if (quotaStatus == 1) {
+			quotaUsed = QuotaUtil.calculateServerUsedQuota(classPK);
+		}
+
+		// Update quota
 		final Quota quota = QuotaLocalServiceUtil.createQuota(0);
 
 		quota.setQuotaId(quotaId);
@@ -138,13 +138,13 @@ public class ServerQuotaPortlet extends com.liferay.util.bridges.mvc.MVCPortlet 
 		quota.setClassPK(classPK);
 		quota.setQuotaStatus(quotaStatus);
 		quota.setQuotaAssigned(quotaAssigned);
+		quota.setQuotaUsed(quotaUsed);
 		quota.setQuotaAlert(quotaAlert);
 
 		// TODO: handle exceptions and remove the throws clause from method
 		// signature
 		if (cmd.equals(Constants.ADD)) {
-			final long newQuotaId = CounterLocalServiceUtil
-					.increment(Quota.class.getName());
+			final long newQuotaId = CounterLocalServiceUtil.increment(Quota.class.getName());
 
 			quota.setQuotaId(newQuotaId);
 			QuotaLocalServiceUtil.addQuota(quota);

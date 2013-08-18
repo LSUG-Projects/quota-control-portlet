@@ -36,8 +36,15 @@
 
 	</liferay-ui:search-container-column-text>
 
-	<liferay-ui:search-container-column-text name="quota-status"
-				value="${quota.getQuotaStatus()}" />
+	<liferay-ui:search-container-column-text name="quota-status">
+ 		<c:if test="${quota.getQuotaStatus() eq 1}">
+ 			<liferay-ui:message key="yes" />
+ 		</c:if>
+ 		
+ 		<c:if test="${quota.getQuotaStatus() eq 0}">
+ 			<liferay-ui:message key="no" />
+ 		</c:if>
+ 	</liferay-ui:search-container-column-text>
 
 	<liferay-ui:search-container-column-text name="quota-alert"
 		value="${quota.getQuotaAlert()}" />
