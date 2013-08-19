@@ -18,6 +18,7 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <portlet:defineObjects />
 
@@ -32,13 +33,33 @@
 	<%-- TODO --%>
  	<%--liferay-ui:search-container-column-text name="numUser" value="${serverVO.numUser }" /> --%>
  	
- 	<liferay-ui:search-container-column-text name="quota-status" value="${serverVO.quota.quotaStatus }" />
+ 	<liferay-ui:search-container-column-text name="quota-status">
+ 		<c:if test="${serverVO.quota.quotaStatus eq 1}">
+ 			<liferay-ui:message key="yes" />
+ 		</c:if>
+ 		
+ 		<c:if test="${serverVO.quota.quotaStatus eq 0}">
+ 			<liferay-ui:message key="no" />
+ 		</c:if>
+ 	</liferay-ui:search-container-column-text>
  	
  	<liferay-ui:search-container-column-text name="quota-alert" value="${serverVO.quota.quotaAlert }" />
  	
- 	<liferay-ui:search-container-column-text name="quota-assigned" value="${serverVO.quota.quotaAssigned }" />
- 	
- 	<liferay-ui:search-container-column-text name="quota-used" value="${serverVO.quota.quotaUsed }" />
+ 	<liferay-ui:search-container-column-text name="quota-assigned" >
+		<c:if test="${serverVO.quota.quotaAssigned eq -1}">
+			<liferay-ui:message key="quota-unlimited" />
+		</c:if>
+		
+		<c:if test="${serverVO.quota.quotaAssigned ne -1}">
+			<fmt:formatNumber var="quotaAssigned" value="${serverVO.quota.quotaAssigned / 1024 / 1024}" maxFractionDigits="0" />
+			<c:out value="${quotaAssigned}" />
+		</c:if>
+	</liferay-ui:search-container-column-text>
+	
+	<liferay-ui:search-container-column-text name="quota-used">
+		<fmt:formatNumber var="quotaUsed" value="${serverVO.quota.quotaUsed / 1024 / 1024}" maxFractionDigits="3" />
+		<c:out value="${quotaUsed}"></c:out>
+	</liferay-ui:search-container-column-text>
 	
 	<liferay-ui:search-container-column-text name="actions">
       	

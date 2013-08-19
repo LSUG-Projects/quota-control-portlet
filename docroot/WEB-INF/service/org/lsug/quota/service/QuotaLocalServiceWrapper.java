@@ -285,11 +285,11 @@ public class QuotaLocalServiceWrapper implements QuotaLocalService,
 
 	public org.lsug.quota.model.Quota updateQuota(long quotaId,
 		long classNameId, long classPK, int quotaAlert, long quotaAssigned,
-		long quotaUsed, int quotaStatus)
+		int quotaStatus)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.lsug.quota.NoSuchQuotaException {
 		return _quotaLocalService.updateQuota(quotaId, classNameId, classPK,
-			quotaAlert, quotaAssigned, quotaUsed, quotaStatus);
+			quotaAlert, quotaAssigned, quotaStatus);
 	}
 
 	public org.lsug.quota.model.Quota decrementQuota(long classNameId,
