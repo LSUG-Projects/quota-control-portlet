@@ -34,7 +34,7 @@ public class QuotaListenerDLFileEntryLocalService extends DLFileEntryLocalServic
 		
 		// Comprobar si existe una quota, si no existe se crea
 		checkQuota(groupId);
-
+		
 		if (!QuotaUtil.hasQuota(groupId, userId, size))
 			throw new QuotaExceededException();
 

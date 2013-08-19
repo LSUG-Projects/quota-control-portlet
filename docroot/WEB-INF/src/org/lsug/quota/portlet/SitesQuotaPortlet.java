@@ -26,6 +26,7 @@ import javax.portlet.RenderResponse;
 
 import org.lsug.quota.model.Quota;
 import org.lsug.quota.service.QuotaLocalServiceUtil;
+import org.lsug.quota.util.Constants;
 import org.lsug.quota.util.QuotaUtil;
 
 import com.liferay.compat.portal.util.PortalUtil;
@@ -122,8 +123,8 @@ public class SitesQuotaPortlet extends MVCPortlet {
 		final long classNameId = PortalUtil.getClassNameId(Group.class);
 		final long classPK = ParamUtil.getLong(actionRequest, "classPK");
 		// Cuota activa para indicar si una cuota esta activa o no
-		final int quotaStatus = ParamUtil.getBoolean(actionRequest, "quotaStatus", Boolean.FALSE) == Boolean.FALSE ? 0
-				: 1;
+		final int quotaStatus = ParamUtil.getBoolean(actionRequest, "quotaStatus", Boolean.FALSE) == Boolean.FALSE ? Constants.QUOTA_INACTIVE
+				: Constants.QUOTA_ACTIVE;
 		// Numero a partir del cual se envia un correo para enviar un aviso del
 		// espacio utilizado y disponible
 		final int quotaAlert = ParamUtil.getInteger(actionRequest, "quotaAlert", 0);

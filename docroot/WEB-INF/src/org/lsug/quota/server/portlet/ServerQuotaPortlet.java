@@ -113,7 +113,8 @@ public class ServerQuotaPortlet extends com.liferay.util.bridges.mvc.MVCPortlet 
 		final String cmd = ParamUtil.getString(req, Constants.CMD, StringPool.BLANK);
 		final long quotaId = ParamUtil.getLong(req, "quotaId");
 		final long classPK = ParamUtil.getLong(req, "classPK");
-		final int quotaStatus = ParamUtil.getBoolean(req, "quotaStatus", Boolean.FALSE) == Boolean.FALSE ? 0 : 1;
+		final int quotaStatus = ParamUtil.getBoolean(req, "quotaStatus", Boolean.FALSE) == Boolean.FALSE ? org.lsug.quota.util.Constants.QUOTA_INACTIVE
+				: org.lsug.quota.util.Constants.QUOTA_ACTIVE;
 		final boolean quotaUnlimited = ParamUtil.getBoolean(req, "quotaUnlimited", Boolean.FALSE);
 
 		long quotaAssigned = ParamUtil.getLong(req, "quotaAssigned");
