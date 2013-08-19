@@ -93,11 +93,11 @@ public class QuotaLocalServiceImpl extends QuotaLocalServiceBaseImpl {
 		final long classNameId, final long classPK, final long fileSize)
 		throws NoSuchQuotaException, SystemException {
 
-		if (fileSize >= 0)
+		if (fileSize < 0)
 			throw new IllegalArgumentException(
-				"Cannot increment a quota by a negative increment.");
+					"Cannot decrement a quota by a negative decrement");
 
-		return updateQuota(classNameId, classPK, -fileSize);
+		return updateQuota(classNameId, classPK, fileSize);
 	}
 
 	public Quota incrementQuota(
@@ -106,9 +106,9 @@ public class QuotaLocalServiceImpl extends QuotaLocalServiceBaseImpl {
 
 		if (fileSize < 0)
 			throw new IllegalArgumentException(
-				"Cannot decrement a quota by a positive decrement");
+					"Cannot increment a quota by a negative increment.");
 
-		return updateQuota(classNameId, classPK, fileSize);
+		return updateQuota(classNameId, classPK, -fileSize);
 	}
 
 }

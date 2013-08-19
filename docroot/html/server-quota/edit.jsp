@@ -42,18 +42,24 @@ long classPK = BeanParamUtil.getLong(quota, request, "classPK");
 	<aui:input name="backURL" type="hidden" value="<%= backURL %>" />
 	<aui:input name="quotaId" type="hidden" value="<%= quotaId %>" />
 	<aui:input name="classPK" type="hidden" value="<%= classPK %>" />
-
-	<aui:model-context bean="<%= quota %>" model="<%= Quota.class %>" />
-
-	<aui:input name="quotaStatus" />
 	
-	<%-- TODO: add the "quotaAlertStatus" in the service --%>
+	<aui:input label="quota-status" name="quotaStatus" type="checkbox" 
+		value="<%=quota.getQuotaStatus() == 0 ? Boolean.FALSE : Boolean.TRUE%>" />
+		
+	<aui:input label="quota-unlimited" name="quotaUnlimited" type="checkbox" 
+		value="<%=quota.getQuotaAssigned() == -1 ? Boolean.TRUE : Boolean.FALSE%>" />			
 
-	<aui:input name="quotaAssigned" />
+	<aui:input label="quota-alert" name="quotaAlert" value="<%=quota.getQuotaAlert()%>">
+		<%-- Validar que solo se puedan introducir digitos --%>	
+		<aui:validator name="digits"/>	
+	</aui:input>			
 
-	<aui:input name="quotaAlert" />
+	<aui:input label="quota-assigned" name="quotaAssigned" value="<%=(quota.getQuotaAssigned() / 1024) / 1024%>">
+		<%-- Validar que solo se puedan introducir digitos --%>	
+		<aui:validator name="digits"/>	
+	</aui:input>
 
-	<aui:button-row>
-		<aui:button type="submit" />
+	<aui:button-row cssClass="button-row">
+		<aui:button type="submit" value="update" />
 	</aui:button-row>
 </aui:form>
