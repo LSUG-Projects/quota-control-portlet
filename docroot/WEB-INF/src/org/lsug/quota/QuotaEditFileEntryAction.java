@@ -61,15 +61,14 @@ public class QuotaEditFileEntryAction extends BaseStrutsPortletAction {
 		   renderResponse);
    }
 
-	       @Override
+   @Override
 	public void serveResource(StrutsPortletAction originalStrutsPortletAction,
 	       PortletConfig portletConfig, ResourceRequest resourceRequest,
 	       ResourceResponse resourceResponse) 
 	   throws Exception {
-	             
-	       System.out.println("__CutomStrutsPortletAction   serveResource");
-	
-	       originalStrutsPortletAction.serveResource(originalStrutsPortletAction, portletConfig,resourceRequest, resourceResponse);
+	       originalStrutsPortletAction.serveResource(
+    		   originalStrutsPortletAction, portletConfig,resourceRequest, 
+    		   resourceResponse);
        }
 
 }
