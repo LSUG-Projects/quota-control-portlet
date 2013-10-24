@@ -22,7 +22,7 @@
 	<portlet:param name="tabs2" value="${tabs2}" />
 </liferay-portlet:renderURL>
 
-<liferay-ui:tabs names="sites,sites-users" param="tabs2" url="${portletURL}"/>
+<liferay-ui:tabs names="sites,user-sites" param="tabs2" url="${portletURL}"/>
 			
 <liferay-ui:search-container searchContainer="${searchContainer}">
 	

@@ -87,7 +87,7 @@ public class SitesQuotaPortlet extends MVCPortlet {
 				searchContainer.setResults(results);
 				searchContainer.setTotal(total);
 
-			} else if (tabs2.equalsIgnoreCase("sites-users")) {
+			} else if (tabs2.equalsIgnoreCase("user-sites")) {
 
 				// Obtenemos los sitios de usuario de una instancia
 				final List<Quota> results = QuotaUtil.getSitesUsersQuotas(companyId, searchContainer.getStart(),
