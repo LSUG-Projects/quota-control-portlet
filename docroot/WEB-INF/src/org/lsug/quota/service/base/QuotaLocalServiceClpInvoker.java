@@ -123,7 +123,7 @@ public class QuotaLocalServiceClpInvoker {
 		_methodName47 = "updateQuota";
 
 		_methodParameterTypes47 = new String[] {
-				"long", "long", "long", "int", "long", "int"
+				"long", "long", "long", "int", "long", "long", "int"
 			};
 
 		_methodName48 = "decrementQuota";
@@ -264,7 +264,8 @@ public class QuotaLocalServiceClpInvoker {
 				((Long)arguments[2]).longValue(),
 				((Integer)arguments[3]).intValue(),
 				((Long)arguments[4]).longValue(),
-				((Integer)arguments[5]).intValue());
+				((Long)arguments[5]).longValue(),
+				((Integer)arguments[6]).intValue());
 		}
 
 		if (_methodName48.equals(name) &&

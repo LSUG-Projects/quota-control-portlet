@@ -123,7 +123,7 @@ public class QuotaLocalServiceClp implements QuotaLocalService {
 		_methodName22 = "updateQuota";
 
 		_methodParameterTypes22 = new String[] {
-				"long", "long", "long", "int", "long", "int"
+				"long", "long", "long", "int", "long", "long", "int"
 			};
 
 		_methodName23 = "decrementQuota";
@@ -771,7 +771,7 @@ public class QuotaLocalServiceClp implements QuotaLocalService {
 
 	public org.lsug.quota.model.Quota updateQuota(long quotaId,
 		long classNameId, long classPK, int quotaAlert, long quotaAssigned,
-		int quotaStatus)
+		long quotaUsed, int quotaStatus)
 		throws com.liferay.portal.kernel.exception.SystemException,
 			org.lsug.quota.NoSuchQuotaException {
 		Object returnObj = null;
@@ -789,6 +789,8 @@ public class QuotaLocalServiceClp implements QuotaLocalService {
 					quotaAlert,
 						
 					quotaAssigned,
+						
+					quotaUsed,
 						
 					quotaStatus
 					});
