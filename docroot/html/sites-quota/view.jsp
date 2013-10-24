@@ -12,7 +12,7 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-%>
+%> 
 
 <%@ include file="/html/sites-quota/init.jsp"%>
 
@@ -30,13 +30,13 @@
 	
 	<liferay-ui:search-container-row className="org.lsug.quota.model.Quota" keyProperty="quotaId" modelVar="quota">
 			
-	<liferay-ui:search-container-column-text name="site">
+	<liferay-ui:search-container-column-text name="site-name">
 
 		<%= GroupLocalServiceUtil.getGroup(quota.getClassPK()).getDescriptiveName(locale) %>
 
 	</liferay-ui:search-container-column-text>
 
-	<liferay-ui:search-container-column-text name="quota-status">
+	<liferay-ui:search-container-column-text name="quota-enabled">
  		<c:if test="${quota.getQuotaStatus() eq 1}">
  			<liferay-ui:message key="yes" />
  		</c:if>
@@ -53,7 +53,7 @@
 		orderableProperty="quotaAssigned">
 		
 		<fmt:formatNumber var="quotaAssigned" value="${quota.getQuotaAssigned() / 1024 / 1024}" maxFractionDigits="0" />
-		<c:out value="${quotaAssigned}"></c:out>
+		<c:out value="${quotaAssigned}"></c:out> MB
 
 	</liferay-ui:search-container-column-text>
 
@@ -61,7 +61,8 @@
 		orderableProperty="quotaUsed">
 			
 		<fmt:formatNumber var="quotaUsed" value="${quota.getQuotaUsed() / 1024 / 1024}" maxFractionDigits="3" />
-		<c:out value="${quotaUsed}"></c:out>
+		<fmt:formatNumber var="percentageQuotaUsed" value="${quota.getQuotaUsed() * 100/ quota.getQuotaAssigned()}" />
+		<c:out value="${quotaUsed}"></c:out> MB (<c:out value="${percentageQuotaUsed}"></c:out>%) 
 			
 	</liferay-ui:search-container-column-text>
 
