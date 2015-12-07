@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,12 +17,10 @@ package org.lsug.quota.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link QuotaService}.
- * </p>
+ * Provides a wrapper for {@link QuotaService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       QuotaService
+ * @author Brian Wing Shun Chan
+ * @see QuotaService
  * @generated
  */
 public class QuotaServiceWrapper implements QuotaService,
@@ -36,6 +34,7 @@ public class QuotaServiceWrapper implements QuotaService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _quotaService.getBeanIdentifier();
 	}
@@ -45,10 +44,12 @@ public class QuotaServiceWrapper implements QuotaService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_quotaService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
@@ -56,23 +57,25 @@ public class QuotaServiceWrapper implements QuotaService,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public QuotaService getWrappedQuotaService() {
 		return _quotaService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedQuotaService(QuotaService quotaService) {
 		_quotaService = quotaService;
 	}
 
+	@Override
 	public QuotaService getWrappedService() {
 		return _quotaService;
 	}
 
+	@Override
 	public void setWrappedService(QuotaService quotaService) {
 		_quotaService = quotaService;
 	}

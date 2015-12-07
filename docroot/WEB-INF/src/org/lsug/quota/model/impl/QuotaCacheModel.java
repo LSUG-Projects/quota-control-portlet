@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,7 +19,10 @@ import com.liferay.portal.model.CacheModel;
 
 import org.lsug.quota.model.Quota;
 
-import java.io.Serializable;
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 
 /**
  * The cache model class for representing Quota in entity cache.
@@ -28,13 +31,15 @@ import java.io.Serializable;
  * @see Quota
  * @generated
  */
-public class QuotaCacheModel implements CacheModel<Quota>, Serializable {
+public class QuotaCacheModel implements CacheModel<Quota>, Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{quotaId=");
 		sb.append(quotaId);
+		sb.append(", companyId=");
+		sb.append(companyId);
 		sb.append(", classNameId=");
 		sb.append(classNameId);
 		sb.append(", classPK=");
@@ -52,10 +57,12 @@ public class QuotaCacheModel implements CacheModel<Quota>, Serializable {
 		return sb.toString();
 	}
 
+	@Override
 	public Quota toEntityModel() {
 		QuotaImpl quotaImpl = new QuotaImpl();
 
 		quotaImpl.setQuotaId(quotaId);
+		quotaImpl.setCompanyId(companyId);
 		quotaImpl.setClassNameId(classNameId);
 		quotaImpl.setClassPK(classPK);
 		quotaImpl.setQuotaAssigned(quotaAssigned);
@@ -68,7 +75,33 @@ public class QuotaCacheModel implements CacheModel<Quota>, Serializable {
 		return quotaImpl;
 	}
 
+	@Override
+	public void readExternal(ObjectInput objectInput) throws IOException {
+		quotaId = objectInput.readLong();
+		companyId = objectInput.readLong();
+		classNameId = objectInput.readLong();
+		classPK = objectInput.readLong();
+		quotaAssigned = objectInput.readLong();
+		quotaUsed = objectInput.readLong();
+		quotaStatus = objectInput.readInt();
+		quotaAlert = objectInput.readInt();
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput objectOutput)
+		throws IOException {
+		objectOutput.writeLong(quotaId);
+		objectOutput.writeLong(companyId);
+		objectOutput.writeLong(classNameId);
+		objectOutput.writeLong(classPK);
+		objectOutput.writeLong(quotaAssigned);
+		objectOutput.writeLong(quotaUsed);
+		objectOutput.writeInt(quotaStatus);
+		objectOutput.writeInt(quotaAlert);
+	}
+
 	public long quotaId;
+	public long companyId;
 	public long classNameId;
 	public long classPK;
 	public long quotaAssigned;

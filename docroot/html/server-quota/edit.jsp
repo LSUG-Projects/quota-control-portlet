@@ -1,8 +1,6 @@
-<%@page import="com.liferay.portal.kernel.bean.BeanParamUtil"%>
-<%@page import="com.liferay.portal.kernel.util.ParamUtil"%>
 <%
 /**
- * Copyright (c) 2013 Liferay Spain User Group All rights reserved.
+ * Copyright (c) 2013-present Liferay Spain User Group All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,52 +12,25 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
- %>
-
-<%@ include file="/html/server-quota/init.jsp" %>
-
-<%
-Quota quota = (Quota) request.getAttribute( "quota" );
-
-String backURL = ParamUtil.getString(request, "backURL");
-
-long quotaId = BeanParamUtil.getLong(quota, request, "quotaId");
-
-long classPK = BeanParamUtil.getLong(quota, request, "classPK");
 %>
 
-<portlet:actionURL var="editQuotaURL" name="saveServerQuota" />
+<%@ include file="/html/common/init.jsp" %>
 
-<liferay-ui:header
-	backURL="<%= backURL %>"
-/>
+<%
+String backURL = ParamUtil.getString(request, "backURL");
 
-<%-- TODO: show error messages --%>
-<%-- <liferay-ui:error key="" message="" /> --%>
+long quotaId = ParamUtil.getLong(request, "quotaId");
+long classPK = ParamUtil.getLong(request, "classPK");
 
-<aui:form action="<%= editQuotaURL %>" method="post" name="fm" >
-	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= quotaId == 0 ? Constants.ADD : Constants.UPDATE %>"/>
-	<aui:input name="backURL" type="hidden" value="<%= backURL %>" />
-	<aui:input name="quotaId" type="hidden" value="<%= quotaId %>" />
-	<aui:input name="classPK" type="hidden" value="<%= classPK %>" />
-	
-	<aui:input label="quota-status" name="quotaStatus" type="checkbox" 
-		value="<%=quota.getQuotaStatus() == 0 ? Boolean.FALSE : Boolean.TRUE%>" />
-		
-	<aui:input label="quota-unlimited" name="quotaUnlimited" type="checkbox" 
-		value="<%=quota.getQuotaAssigned() == -1 ? Boolean.TRUE : Boolean.FALSE%>" />			
+Quota quotaBean = QuotaLocalServiceUtil.getQuota(quotaId);
 
-	<aui:input label="quota-alert" name="quotaAlert" value="<%=quota.getQuotaAlert()%>">
-		<%-- Validar que solo se puedan introducir digitos --%>	
-		<aui:validator name="digits"/>	
-	</aui:input>			
+renderRequest.setAttribute("quota", quotaBean);
+%>
 
-	<aui:input label="quota-assigned" name="quotaAssigned" value="<%=(quota.getQuotaAssigned() / 1024) / 1024%>">
-		<%-- Validar que solo se puedan introducir digitos --%>	
-		<aui:validator name="digits"/>	
-	</aui:input>
+<portlet:actionURL name="saveServerQuota" var="editQuotaURL" />
 
-	<aui:button-row cssClass="button-row">
-		<aui:button type="submit" value="update" />
-	</aui:button-row>
-</aui:form>
+<liferay-util:include page="/html/common/quota_form.jsp" servletContext="<%= getServletContext() %>">
+	<liferay-util:param name="editQuotaURL" value="<%= editQuotaURL %>" />
+	<liferay-util:param name="backURL" value="<%= backURL %>" />
+	<liferay-util:param name="addUnlimited" value="<%= Boolean.TRUE.toString() %>" />
+</liferay-util:include>

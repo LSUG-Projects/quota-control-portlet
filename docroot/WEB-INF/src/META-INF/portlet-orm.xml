@@ -10,6 +10,7 @@
 	<mapped-superclass class="org.lsug.quota.model.impl.QuotaModelImpl">
 		<attributes>
 			<id name="quotaId" />
+			<basic name="companyId" />
 			<basic name="classNameId" />
 			<basic name="classPK" />
 			<basic name="quotaAssigned" />

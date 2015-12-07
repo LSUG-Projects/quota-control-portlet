@@ -14,49 +14,25 @@
 	 */
 %>
 
-<%@page import="com.liferay.portal.kernel.util.GetterUtil"%>
-<%@page import="org.lsug.quota.service.QuotaLocalServiceUtil"%>
 
-<%@ include file="/html/sites-quota/init.jsp"%>
+<%@ include file="/html/common/init.jsp" %>
 
 <%
 final String tabs2 = ParamUtil.getString(request, "tabs2", "sites");
+
 final long quotaId = ParamUtil.getLong(request, "quotaId");
 final Quota quota = QuotaLocalServiceUtil.getQuota(quotaId);
+
+renderRequest.setAttribute("quota", quota);
 %>
 
 <portlet:actionURL var="editURL">
-	<portlet:param name="<%=ActionRequest.ACTION_NAME%>" value="updateQuota" />
-	<portlet:param name="quotaId" value="<%=String.valueOf(quotaId)%>" />
-	<portlet:param name="classPK" value="<%=String.valueOf(quota.getClassPK())%>" />
+	<portlet:param name="<%= ActionRequest.ACTION_NAME %>" value="updateQuota" />
+	<portlet:param name="quotaId" value="<%= String.valueOf(quotaId) %>" />
+	<portlet:param name="classPK" value="<%= String.valueOf(quota.getClassPK()) %>" />
 </portlet:actionURL>
 
-<aui:form action="<%=editURL%>" method="post" name="fm">
-	
-	<%-- Campo oculto para saber en que pestaña estabamos y volver alli --%>
-	<input type="hidden" value="<%=tabs2 %>" name="<portlet:namespace/>tabs2"/>
-
-	<aui:input label="enable-quota" name="quotaStatus" type="checkbox" 
-		value="<%=quota.getQuotaStatus() == 0 ? Boolean.FALSE : Boolean.TRUE%>" />				
-
-	</br>
-
-	<aui:input label="quota-alert" name="quotaAlert" value="<%=quota.getQuotaAlert()%>">
-		<%-- Validar que solo se puedan introducir digitos --%>	
-		<aui:validator name="digits"/>	
-	</aui:input>			
-
-	</br>
-
-	<aui:input label="quota-assigned" name="quotaAssigned" value="<%=(quota.getQuotaAssigned() / 1024) / 1024%>">
-		<%-- Validar que solo se puedan introducir digitos --%>	
-		<aui:validator name="digits"/>	
-	</aui:input>
-
-	</br>
-		
-	<aui:button-row cssClass="button-row">
-		<aui:button type="submit" value="update" />
-	</aui:button-row>
-	
-</aui:form>
+<liferay-util:include page="/html/common/quota_form.jsp" servletContext="<%= getServletContext() %>">
+	<liferay-util:param name="editQuotaURL" value="<%= editURL %>" />
+	<liferay-util:param name="tabs2" value="<%= tabs2 %>" />
+</liferay-util:include>

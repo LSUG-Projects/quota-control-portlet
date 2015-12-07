@@ -1,25 +1,29 @@
 <?xml version="1.0"?>
-<!DOCTYPE liferay-portlet-app PUBLIC "-//Liferay//DTD Portlet Application 6.1.0//EN" "http://www.liferay.com/dtd/liferay-portlet-app_6_1_0.dtd">
+<!DOCTYPE liferay-portlet-app PUBLIC "-//Liferay//DTD Portlet Application 6.2.0//EN" "http://www.liferay.com/dtd/liferay-portlet-app_6_2_0.dtd">
 
 <liferay-portlet-app>
 	<portlet>
 		<portlet-name>server-quota-portlet</portlet-name>
 		<icon>/html/server-quota/icon.png</icon>
+		<user-notification-definitions>/org/lsug/quota/portlet/notification/quota-server-user-notification-definition.xml</user-notification-definitions>
+		<user-notification-handler-class>org.lsug.quota.portlet.notification.QuotaServerNotificationHandler</user-notification-handler-class>
 		<control-panel-entry-category>server</control-panel-entry-category>
 		<control-panel-entry-weight>2.5</control-panel-entry-weight>
 		<instanceable>false</instanceable>
+		<requires-namespaced-parameters>false</requires-namespaced-parameters>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
 		<css-class-wrapper>server-quota-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
 		<portlet-name>sites-quota-portlet</portlet-name>
 		<icon>/html/sites-quota/icon.png</icon>
+		<user-notification-definitions>/org/lsug/quota/portlet/notification/quota-site-user-notification-definition.xml</user-notification-definitions>
+		<user-notification-handler-class>org.lsug.quota.portlet.notification.QuotaSiteNotificationHandler</user-notification-handler-class>
 		<control-panel-entry-category>portal</control-panel-entry-category>
 		<control-panel-entry-weight>2.5</control-panel-entry-weight>
 		<instanceable>false</instanceable>
+		<requires-namespaced-parameters>false</requires-namespaced-parameters>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
 		<css-class-wrapper>sites-quota-portlet</css-class-wrapper>
 	</portlet>
 	<portlet>
@@ -28,12 +32,21 @@
 		<control-panel-entry-category>my</control-panel-entry-category>
 		<control-panel-entry-weight>2.5</control-panel-entry-weight>
 		<instanceable>false</instanceable>
+		<requires-namespaced-parameters>false</requires-namespaced-parameters>
 		<header-portlet-css>/css/main.css</header-portlet-css>
-		<footer-portlet-javascript>
-			/js/main.js
-		</footer-portlet-javascript>
 		<css-class-wrapper>my-quota-portlet</css-class-wrapper>
 	</portlet>
+	<portlet>
+		<portlet-name>site-configuration-quota-portlet</portlet-name>
+		<icon>/html/site-configuration-quota/icon.png</icon>
+		<control-panel-entry-category>site_administration.configuration</control-panel-entry-category>
+		<control-panel-entry-weight>2.5</control-panel-entry-weight>
+		<instanceable>false</instanceable>
+		<requires-namespaced-parameters>false</requires-namespaced-parameters>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<css-class-wrapper>site-configuration-quota-portlet</css-class-wrapper>
+	</portlet>
+
 	<role-mapper>
 		<role-name>administrator</role-name>
 		<role-link>Administrator</role-link>

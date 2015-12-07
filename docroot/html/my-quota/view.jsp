@@ -12,10 +12,22 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
- %>
+%>
 
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ include file="/html/common/init.jsp" %>
 
-<portlet:defineObjects />
+<% long classNameId = PortalUtil.getClassNameId(User.class);
 
-This is the <b>My Quota</b> portlet in View mode.
+Quota quota = QuotaLocalServiceUtil.fetchQuotaByClassNameIdClassPK(classNameId, themeDisplay.getUser().getGroupId());
+%>
+
+<c:if test="<%= quota != null && quota.isEnabled() %>">
+
+	<portlet:resourceURL var="userOwnQuotaURL" />
+
+	<img src="<%= userOwnQuotaURL %>" />
+
+</c:if>
+<c:if test="<%= quota == null || !quota.isEnabled() %>">
+	<liferay-ui:message key="user-site-no-quota-enabled" />
+</c:if>

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,6 +16,7 @@ package org.lsug.quota.model;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -23,11 +24,12 @@ import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
+import org.lsug.quota.service.ClpSerializer;
 import org.lsug.quota.service.QuotaLocalServiceUtil;
 
 import java.io.Serializable;
 
-import java.lang.reflect.Proxy;
+import java.lang.reflect.Method;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,26 +41,32 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 	public QuotaClp() {
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return Quota.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return Quota.class.getName();
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _quotaId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setQuotaId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_quotaId);
+		return _quotaId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
@@ -68,6 +76,7 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("quotaId", getQuotaId());
+		attributes.put("companyId", getCompanyId());
 		attributes.put("classNameId", getClassNameId());
 		attributes.put("classPK", getClassPK());
 		attributes.put("quotaAssigned", getQuotaAssigned());
@@ -84,6 +93,12 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 
 		if (quotaId != null) {
 			setQuotaId(quotaId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
 		}
 
 		Long classNameId = (Long)attributes.get("classNameId");
@@ -123,14 +138,53 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 		}
 	}
 
+	@Override
 	public long getQuotaId() {
 		return _quotaId;
 	}
 
+	@Override
 	public void setQuotaId(long quotaId) {
 		_quotaId = quotaId;
+
+		if (_quotaRemoteModel != null) {
+			try {
+				Class<?> clazz = _quotaRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setQuotaId", long.class);
+
+				method.invoke(_quotaRemoteModel, quotaId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
+	public long getCompanyId() {
+		return _companyId;
+	}
+
+	@Override
+	public void setCompanyId(long companyId) {
+		_companyId = companyId;
+
+		if (_quotaRemoteModel != null) {
+			try {
+				Class<?> clazz = _quotaRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setCompanyId", long.class);
+
+				method.invoke(_quotaRemoteModel, companyId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
+	}
+
+	@Override
 	public String getClassName() {
 		if (getClassNameId() <= 0) {
 			return StringPool.BLANK;
@@ -139,6 +193,7 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 		return PortalUtil.getClassName(getClassNameId());
 	}
 
+	@Override
 	public void setClassName(String className) {
 		long classNameId = 0;
 
@@ -149,60 +204,237 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 		setClassNameId(classNameId);
 	}
 
+	@Override
 	public long getClassNameId() {
 		return _classNameId;
 	}
 
+	@Override
 	public void setClassNameId(long classNameId) {
 		_classNameId = classNameId;
+
+		if (_quotaRemoteModel != null) {
+			try {
+				Class<?> clazz = _quotaRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setClassNameId", long.class);
+
+				method.invoke(_quotaRemoteModel, classNameId);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getClassPK() {
 		return _classPK;
 	}
 
+	@Override
 	public void setClassPK(long classPK) {
 		_classPK = classPK;
+
+		if (_quotaRemoteModel != null) {
+			try {
+				Class<?> clazz = _quotaRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setClassPK", long.class);
+
+				method.invoke(_quotaRemoteModel, classPK);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getQuotaAssigned() {
 		return _quotaAssigned;
 	}
 
+	@Override
 	public void setQuotaAssigned(long quotaAssigned) {
 		_quotaAssigned = quotaAssigned;
+
+		if (_quotaRemoteModel != null) {
+			try {
+				Class<?> clazz = _quotaRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setQuotaAssigned", long.class);
+
+				method.invoke(_quotaRemoteModel, quotaAssigned);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public long getQuotaUsed() {
 		return _quotaUsed;
 	}
 
+	@Override
 	public void setQuotaUsed(long quotaUsed) {
 		_quotaUsed = quotaUsed;
+
+		if (_quotaRemoteModel != null) {
+			try {
+				Class<?> clazz = _quotaRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setQuotaUsed", long.class);
+
+				method.invoke(_quotaRemoteModel, quotaUsed);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public int getQuotaStatus() {
 		return _quotaStatus;
 	}
 
+	@Override
 	public void setQuotaStatus(int quotaStatus) {
 		_quotaStatus = quotaStatus;
+
+		if (_quotaRemoteModel != null) {
+			try {
+				Class<?> clazz = _quotaRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setQuotaStatus", int.class);
+
+				method.invoke(_quotaRemoteModel, quotaStatus);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
 	public int getQuotaAlert() {
 		return _quotaAlert;
 	}
 
+	@Override
 	public void setQuotaAlert(int quotaAlert) {
 		_quotaAlert = quotaAlert;
+
+		if (_quotaRemoteModel != null) {
+			try {
+				Class<?> clazz = _quotaRemoteModel.getClass();
+
+				Method method = clazz.getMethod("setQuotaAlert", int.class);
+
+				method.invoke(_quotaRemoteModel, quotaAlert);
+			}
+			catch (Exception e) {
+				throw new UnsupportedOperationException(e);
+			}
+		}
 	}
 
+	@Override
+	public short getQuotaUsedPercentage() {
+		try {
+			String methodName = "getQuotaUsedPercentage";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			Short returnObj = (Short)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
+	public boolean isEnabled() {
+		try {
+			String methodName = "isEnabled";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
+	public boolean isUnlimitedQuota() {
+		try {
+			String methodName = "isUnlimitedQuota";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
 	public boolean isExceeded() {
-		throw new UnsupportedOperationException();
+		try {
+			String methodName = "isExceeded";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
 	}
 
+	@Override
 	public boolean hasFreeMB(long size) {
-		throw new UnsupportedOperationException();
+		try {
+			String methodName = "hasFreeMB";
+
+			Class<?>[] parameterTypes = new Class<?>[] { long.class };
+
+			Object[] parameterValues = new Object[] { size };
+
+			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
 	}
 
 	public BaseModel<?> getQuotaRemoteModel() {
@@ -213,6 +445,48 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 		_quotaRemoteModel = quotaRemoteModel;
 	}
 
+	public Object invokeOnRemoteModel(String methodName,
+		Class<?>[] parameterTypes, Object[] parameterValues)
+		throws Exception {
+		Object[] remoteParameterValues = new Object[parameterValues.length];
+
+		for (int i = 0; i < parameterValues.length; i++) {
+			if (parameterValues[i] != null) {
+				remoteParameterValues[i] = ClpSerializer.translateInput(parameterValues[i]);
+			}
+		}
+
+		Class<?> remoteModelClass = _quotaRemoteModel.getClass();
+
+		ClassLoader remoteModelClassLoader = remoteModelClass.getClassLoader();
+
+		Class<?>[] remoteParameterTypes = new Class[parameterTypes.length];
+
+		for (int i = 0; i < parameterTypes.length; i++) {
+			if (parameterTypes[i].isPrimitive()) {
+				remoteParameterTypes[i] = parameterTypes[i];
+			}
+			else {
+				String parameterTypeName = parameterTypes[i].getName();
+
+				remoteParameterTypes[i] = remoteModelClassLoader.loadClass(parameterTypeName);
+			}
+		}
+
+		Method method = remoteModelClass.getMethod(methodName,
+				remoteParameterTypes);
+
+		Object returnValue = method.invoke(_quotaRemoteModel,
+				remoteParameterValues);
+
+		if (returnValue != null) {
+			returnValue = ClpSerializer.translateOutput(returnValue);
+		}
+
+		return returnValue;
+	}
+
+	@Override
 	public void persist() throws SystemException {
 		if (this.isNew()) {
 			QuotaLocalServiceUtil.addQuota(this);
@@ -224,7 +498,7 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 
 	@Override
 	public Quota toEscapedModel() {
-		return (Quota)Proxy.newProxyInstance(Quota.class.getClassLoader(),
+		return (Quota)ProxyUtil.newProxyInstance(Quota.class.getClassLoader(),
 			new Class[] { Quota.class }, new AutoEscapeBeanHandler(this));
 	}
 
@@ -233,6 +507,7 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 		QuotaClp clone = new QuotaClp();
 
 		clone.setQuotaId(getQuotaId());
+		clone.setCompanyId(getCompanyId());
 		clone.setClassNameId(getClassNameId());
 		clone.setClassPK(getClassPK());
 		clone.setQuotaAssigned(getQuotaAssigned());
@@ -243,6 +518,7 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 		return clone;
 	}
 
+	@Override
 	public int compareTo(Quota quota) {
 		long primaryKey = quota.getPrimaryKey();
 
@@ -259,18 +535,15 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof QuotaClp)) {
 			return false;
 		}
 
-		QuotaClp quota = null;
-
-		try {
-			quota = (QuotaClp)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		QuotaClp quota = (QuotaClp)obj;
 
 		long primaryKey = quota.getPrimaryKey();
 
@@ -282,6 +555,10 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 		}
 	}
 
+	public Class<?> getClpSerializerClass() {
+		return _clpSerializerClass;
+	}
+
 	@Override
 	public int hashCode() {
 		return (int)getPrimaryKey();
@@ -289,10 +566,12 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{quotaId=");
 		sb.append(getQuotaId());
+		sb.append(", companyId=");
+		sb.append(getCompanyId());
 		sb.append(", classNameId=");
 		sb.append(getClassNameId());
 		sb.append(", classPK=");
@@ -310,8 +589,9 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(28);
 
 		sb.append("<model><model-name>");
 		sb.append("org.lsug.quota.model.Quota");
@@ -320,6 +600,10 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 		sb.append(
 			"<column><column-name>quotaId</column-name><column-value><![CDATA[");
 		sb.append(getQuotaId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>companyId</column-name><column-value><![CDATA[");
+		sb.append(getCompanyId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>classNameId</column-name><column-value><![CDATA[");
@@ -352,6 +636,7 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 	}
 
 	private long _quotaId;
+	private long _companyId;
 	private long _classNameId;
 	private long _classPK;
 	private long _quotaAssigned;
@@ -359,4 +644,5 @@ public class QuotaClp extends BaseModelImpl<Quota> implements Quota {
 	private int _quotaStatus;
 	private int _quotaAlert;
 	private BaseModel<?> _quotaRemoteModel;
+	private Class<?> _clpSerializerClass = org.lsug.quota.service.ClpSerializer.class;
 }

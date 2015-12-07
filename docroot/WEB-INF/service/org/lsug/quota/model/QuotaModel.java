@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -72,10 +72,25 @@ public interface QuotaModel extends AttachedModel, BaseModel<Quota> {
 	public void setQuotaId(long quotaId);
 
 	/**
+	 * Returns the company ID of this quota.
+	 *
+	 * @return the company ID of this quota
+	 */
+	public long getCompanyId();
+
+	/**
+	 * Sets the company ID of this quota.
+	 *
+	 * @param companyId the company ID of this quota
+	 */
+	public void setCompanyId(long companyId);
+
+	/**
 	 * Returns the fully qualified class name of this quota.
 	 *
 	 * @return the fully qualified class name of this quota
 	 */
+	@Override
 	public String getClassName();
 
 	public void setClassName(String className);
@@ -85,6 +100,7 @@ public interface QuotaModel extends AttachedModel, BaseModel<Quota> {
 	 *
 	 * @return the class name ID of this quota
 	 */
+	@Override
 	public long getClassNameId();
 
 	/**
@@ -92,6 +108,7 @@ public interface QuotaModel extends AttachedModel, BaseModel<Quota> {
 	 *
 	 * @param classNameId the class name ID of this quota
 	 */
+	@Override
 	public void setClassNameId(long classNameId);
 
 	/**
@@ -99,6 +116,7 @@ public interface QuotaModel extends AttachedModel, BaseModel<Quota> {
 	 *
 	 * @return the class p k of this quota
 	 */
+	@Override
 	public long getClassPK();
 
 	/**
@@ -106,6 +124,7 @@ public interface QuotaModel extends AttachedModel, BaseModel<Quota> {
 	 *
 	 * @param classPK the class p k of this quota
 	 */
+	@Override
 	public void setClassPK(long classPK);
 
 	/**
@@ -164,35 +183,60 @@ public interface QuotaModel extends AttachedModel, BaseModel<Quota> {
 	 */
 	public void setQuotaAlert(int quotaAlert);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	@Override
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
-	public int compareTo(Quota quota);
+	@Override
+	public int compareTo(org.lsug.quota.model.Quota quota);
 
+	@Override
 	public int hashCode();
 
-	public CacheModel<Quota> toCacheModel();
+	@Override
+	public CacheModel<org.lsug.quota.model.Quota> toCacheModel();
 
-	public Quota toEscapedModel();
+	@Override
+	public org.lsug.quota.model.Quota toEscapedModel();
 
+	@Override
+	public org.lsug.quota.model.Quota toUnescapedModel();
+
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

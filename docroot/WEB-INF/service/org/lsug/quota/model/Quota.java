@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -31,7 +31,13 @@ public interface Quota extends QuotaModel, PersistedModel {
 	 *
 	 * Never modify this interface directly. Add methods to {@link org.lsug.quota.model.impl.QuotaImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
+	public short getQuotaUsedPercentage();
+
 	public boolean hasFreeMB(long size);
 
+	public boolean isEnabled();
+
 	public boolean isExceeded();
+
+	public boolean isUnlimitedQuota();
 }

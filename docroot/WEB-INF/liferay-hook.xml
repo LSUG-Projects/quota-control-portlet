@@ -1,22 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hook PUBLIC "-//Liferay//DTD Hook 6.1.0//EN" "http://www.liferay.com/dtd/liferay-hook_6_1_0.dtd">
+<!DOCTYPE hook PUBLIC "-//Liferay//DTD Hook 6.2.0//EN" "http://www.liferay.com/dtd/liferay-hook_6_2_0.dtd">
 
 <hook>
-    <language-properties>content/Language.properties</language-properties>
-    <language-properties>content/Language_ca.properties</language-properties>
-    <language-properties>content/Language_en.properties</language-properties>
-    <language-properties>content/Language_es.properties</language-properties>
-    <language-properties>content/Language_eu.properties</language-properties>
-    <language-properties>content/Language_gl.properties</language-properties>
+	<portal-properties>portal.properties</portal-properties>
+	<language-properties>content-portal/Language.properties</language-properties>
+	<language-properties>content-portal/Language_ca.properties</language-properties>
+	<language-properties>content-portal/Language_en.properties</language-properties>
+	<language-properties>content-portal/Language_es.properties</language-properties>
+	<language-properties>content-portal/Language_eu.properties</language-properties>
+	<language-properties>content-portal/Language_gl.properties</language-properties>
 	<custom-jsp-dir>/custom_jsps</custom-jsp-dir>
 	<service>
-		<service-type>
-			com.liferay.portlet.documentlibrary.service.DLFileEntryLocalService
-		</service-type>
+		<service-type>com.liferay.portlet.documentlibrary.service.DLFileEntryLocalService</service-type>
 		<service-impl>org.lsug.quota.QuotaListenerDLFileEntryLocalService</service-impl>
+	</service>
+	<service>
+		<service-type>com.liferay.portal.service.GroupLocalService</service-type>
+		<service-impl>org.lsug.quota.QuotaListenerGroupLocalService</service-impl>
+	</service>
+	<service>
+		<service-type>com.liferay.portal.service.CompanyLocalService</service-type>
+		<service-impl>org.lsug.quota.QuotaListenerCompanyLocalService</service-impl>
 	</service>
 	<struts-action>
 	    <struts-action-path>/document_library/edit_file_entry</struts-action-path>
 	    <struts-action-impl>org.lsug.quota.QuotaEditFileEntryAction</struts-action-impl>
-    </struts-action>
+	</struts-action>
+	<struts-action>
+	    <struts-action-path>/document_library/upload_multiple_file_entries</struts-action-path>
+	    <struts-action-impl>org.lsug.quota.QuotaEditFileEntryAction</struts-action-impl>
+	</struts-action>
 </hook>

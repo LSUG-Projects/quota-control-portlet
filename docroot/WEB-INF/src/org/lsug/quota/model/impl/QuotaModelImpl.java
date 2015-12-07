@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -65,6 +65,7 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 	public static final String TABLE_NAME = "LSUGQUOTA_Quota";
 	public static final Object[][] TABLE_COLUMNS = {
 			{ "quotaId", Types.BIGINT },
+			{ "companyId", Types.BIGINT },
 			{ "classNameId", Types.BIGINT },
 			{ "classPK", Types.BIGINT },
 			{ "quotaAssigned", Types.BIGINT },
@@ -72,8 +73,10 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 			{ "quotaStatus", Types.INTEGER },
 			{ "quotaAlert", Types.INTEGER }
 		};
-	public static final String TABLE_SQL_CREATE = "create table LSUGQUOTA_Quota (quotaId LONG not null primary key,classNameId LONG,classPK LONG,quotaAssigned LONG,quotaUsed LONG,quotaStatus INTEGER,quotaAlert INTEGER)";
+	public static final String TABLE_SQL_CREATE = "create table LSUGQUOTA_Quota (quotaId LONG not null primary key,companyId LONG,classNameId LONG,classPK LONG,quotaAssigned LONG,quotaUsed LONG,quotaStatus INTEGER,quotaAlert INTEGER)";
 	public static final String TABLE_SQL_DROP = "drop table LSUGQUOTA_Quota";
+	public static final String ORDER_BY_JPQL = " ORDER BY quota.quotaId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY LSUGQUOTA_Quota.quotaId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -88,6 +91,8 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 			true);
 	public static long CLASSNAMEID_COLUMN_BITMASK = 1L;
 	public static long CLASSPK_COLUMN_BITMASK = 2L;
+	public static long COMPANYID_COLUMN_BITMASK = 4L;
+	public static long QUOTAID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -103,6 +108,7 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 		Quota model = new QuotaImpl();
 
 		model.setQuotaId(soapModel.getQuotaId());
+		model.setCompanyId(soapModel.getCompanyId());
 		model.setClassNameId(soapModel.getClassNameId());
 		model.setClassPK(soapModel.getClassPK());
 		model.setQuotaAssigned(soapModel.getQuotaAssigned());
@@ -139,26 +145,32 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 	public QuotaModelImpl() {
 	}
 
+	@Override
 	public long getPrimaryKey() {
 		return _quotaId;
 	}
 
+	@Override
 	public void setPrimaryKey(long primaryKey) {
 		setQuotaId(primaryKey);
 	}
 
+	@Override
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_quotaId);
+		return _quotaId;
 	}
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Class<?> getModelClass() {
 		return Quota.class;
 	}
 
+	@Override
 	public String getModelClassName() {
 		return Quota.class.getName();
 	}
@@ -168,6 +180,7 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
 		attributes.put("quotaId", getQuotaId());
+		attributes.put("companyId", getCompanyId());
 		attributes.put("classNameId", getClassNameId());
 		attributes.put("classPK", getClassPK());
 		attributes.put("quotaAssigned", getQuotaAssigned());
@@ -184,6 +197,12 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 
 		if (quotaId != null) {
 			setQuotaId(quotaId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
 		}
 
 		Long classNameId = (Long)attributes.get("classNameId");
@@ -224,14 +243,40 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 	}
 
 	@JSON
+	@Override
 	public long getQuotaId() {
 		return _quotaId;
 	}
 
+	@Override
 	public void setQuotaId(long quotaId) {
 		_quotaId = quotaId;
 	}
 
+	@JSON
+	@Override
+	public long getCompanyId() {
+		return _companyId;
+	}
+
+	@Override
+	public void setCompanyId(long companyId) {
+		_columnBitmask |= COMPANYID_COLUMN_BITMASK;
+
+		if (!_setOriginalCompanyId) {
+			_setOriginalCompanyId = true;
+
+			_originalCompanyId = _companyId;
+		}
+
+		_companyId = companyId;
+	}
+
+	public long getOriginalCompanyId() {
+		return _originalCompanyId;
+	}
+
+	@Override
 	public String getClassName() {
 		if (getClassNameId() <= 0) {
 			return StringPool.BLANK;
@@ -240,6 +285,7 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 		return PortalUtil.getClassName(getClassNameId());
 	}
 
+	@Override
 	public void setClassName(String className) {
 		long classNameId = 0;
 
@@ -251,10 +297,12 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 	}
 
 	@JSON
+	@Override
 	public long getClassNameId() {
 		return _classNameId;
 	}
 
+	@Override
 	public void setClassNameId(long classNameId) {
 		_columnBitmask |= CLASSNAMEID_COLUMN_BITMASK;
 
@@ -272,10 +320,12 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 	}
 
 	@JSON
+	@Override
 	public long getClassPK() {
 		return _classPK;
 	}
 
+	@Override
 	public void setClassPK(long classPK) {
 		_columnBitmask |= CLASSPK_COLUMN_BITMASK;
 
@@ -293,37 +343,45 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 	}
 
 	@JSON
+	@Override
 	public long getQuotaAssigned() {
 		return _quotaAssigned;
 	}
 
+	@Override
 	public void setQuotaAssigned(long quotaAssigned) {
 		_quotaAssigned = quotaAssigned;
 	}
 
 	@JSON
+	@Override
 	public long getQuotaUsed() {
 		return _quotaUsed;
 	}
 
+	@Override
 	public void setQuotaUsed(long quotaUsed) {
 		_quotaUsed = quotaUsed;
 	}
 
 	@JSON
+	@Override
 	public int getQuotaStatus() {
 		return _quotaStatus;
 	}
 
+	@Override
 	public void setQuotaStatus(int quotaStatus) {
 		_quotaStatus = quotaStatus;
 	}
 
 	@JSON
+	@Override
 	public int getQuotaAlert() {
 		return _quotaAlert;
 	}
 
+	@Override
 	public void setQuotaAlert(int quotaAlert) {
 		_quotaAlert = quotaAlert;
 	}
@@ -334,7 +392,7 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 
 	@Override
 	public ExpandoBridge getExpandoBridge() {
-		return ExpandoBridgeFactoryUtil.getExpandoBridge(0,
+		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
 			Quota.class.getName(), getPrimaryKey());
 	}
 
@@ -347,13 +405,12 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 
 	@Override
 	public Quota toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Quota)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Quota)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -361,6 +418,7 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 		QuotaImpl quotaImpl = new QuotaImpl();
 
 		quotaImpl.setQuotaId(getQuotaId());
+		quotaImpl.setCompanyId(getCompanyId());
 		quotaImpl.setClassNameId(getClassNameId());
 		quotaImpl.setClassPK(getClassPK());
 		quotaImpl.setQuotaAssigned(getQuotaAssigned());
@@ -373,6 +431,7 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 		return quotaImpl;
 	}
 
+	@Override
 	public int compareTo(Quota quota) {
 		long primaryKey = quota.getPrimaryKey();
 
@@ -389,18 +448,15 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof Quota)) {
 			return false;
 		}
 
-		Quota quota = null;
-
-		try {
-			quota = (Quota)obj;
-		}
-		catch (ClassCastException cce) {
-			return false;
-		}
+		Quota quota = (Quota)obj;
 
 		long primaryKey = quota.getPrimaryKey();
 
@@ -421,6 +477,10 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 	public void resetOriginalValues() {
 		QuotaModelImpl quotaModelImpl = this;
 
+		quotaModelImpl._originalCompanyId = quotaModelImpl._companyId;
+
+		quotaModelImpl._setOriginalCompanyId = false;
+
 		quotaModelImpl._originalClassNameId = quotaModelImpl._classNameId;
 
 		quotaModelImpl._setOriginalClassNameId = false;
@@ -437,6 +497,8 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 		QuotaCacheModel quotaCacheModel = new QuotaCacheModel();
 
 		quotaCacheModel.quotaId = getQuotaId();
+
+		quotaCacheModel.companyId = getCompanyId();
 
 		quotaCacheModel.classNameId = getClassNameId();
 
@@ -455,10 +517,12 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(15);
+		StringBundler sb = new StringBundler(17);
 
 		sb.append("{quotaId=");
 		sb.append(getQuotaId());
+		sb.append(", companyId=");
+		sb.append(getCompanyId());
 		sb.append(", classNameId=");
 		sb.append(getClassNameId());
 		sb.append(", classPK=");
@@ -476,8 +540,9 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 		return sb.toString();
 	}
 
+	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(25);
+		StringBundler sb = new StringBundler(28);
 
 		sb.append("<model><model-name>");
 		sb.append("org.lsug.quota.model.Quota");
@@ -486,6 +551,10 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 		sb.append(
 			"<column><column-name>quotaId</column-name><column-value><![CDATA[");
 		sb.append(getQuotaId());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>companyId</column-name><column-value><![CDATA[");
+		sb.append(getCompanyId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>classNameId</column-name><column-value><![CDATA[");
@@ -518,10 +587,11 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 	}
 
 	private static ClassLoader _classLoader = Quota.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
-			Quota.class
-		};
+	private static Class<?>[] _escapedModelInterfaces = new Class[] { Quota.class };
 	private long _quotaId;
+	private long _companyId;
+	private long _originalCompanyId;
+	private boolean _setOriginalCompanyId;
 	private long _classNameId;
 	private long _originalClassNameId;
 	private boolean _setOriginalClassNameId;
@@ -533,5 +603,5 @@ public class QuotaModelImpl extends BaseModelImpl<Quota> implements QuotaModel {
 	private int _quotaStatus;
 	private int _quotaAlert;
 	private long _columnBitmask;
-	private Quota _escapedModelProxy;
+	private Quota _escapedModel;
 }

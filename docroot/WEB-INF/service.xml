@@ -1,38 +1,64 @@
 <?xml version="1.0"?>
-<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.1.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_1_0.dtd">
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
 
 <service-builder package-path="org.lsug.quota">
 	<namespace>LSUGQUOTA</namespace>
-	
+
 	<entity name="Quota" local-service="true">
+
 		<!-- Primary keys -->
-		<column name="quotaId" type="long" primary="true"/>
-		<column name="classNameId" type="long"/>
-		<column name="classPK" type="long"/>
-		
+
+		<column name="quotaId" type="long" primary="true" />
+		<column name="companyId" type="long" />
+		<column name="classNameId" type="long" />
+		<column name="classPK" type="long" />
+
 		<!-- Maximum quota (in MB) -->
-		<column name="quotaAssigned" type="long"/>
-		
+
+		<column name="quotaAssigned" type="long" />
+
 		<!-- Amount used (in MB) -->
-		<column name="quotaUsed" type="long"/>
+
+		<column name="quotaUsed" type="long" />
+
 		<!--
 			A quota is either "enabled" (QuotaStatus.ENABLED) or
-			"disabled" (QuotaStatus.DISABLED)			
+			"disabled" (QuotaStatus.DISABLED)
 		-->
-		<column name="quotaStatus" type="int"/>
-		
+
+		<column name="quotaStatus" type="int" />
+
 		<!--
 			When reaching this percentage, the user (the particular user
 			depends on the type of quota) will receive a notification
 		-->
-		<column name="quotaAlert" type="int"/>
-		
-		<finder return-type="Quota" name="ClassNameIdClassPK">
-			<finder-column name="classNameId"/>
-			<finder-column name="classPK"/>
+
+		<column name="quotaAlert" type="int" />
+
+		<finder return-type="Quota" name="CN_CP">
+			<finder-column name="classNameId" />
+			<finder-column name="classPK" />
 		</finder>
+
+		<finder return-type="Collection" name="CN">
+			<finder-column name="classNameId" arrayable-operator="OR" />
+		</finder>
+
+		<finder return-type="Collection" name="C_CN">
+			<finder-column name="companyId" />
+			<finder-column name="classNameId" arrayable-operator="OR" />
+		</finder>
+
+		<reference package-path="com.liferay.portal" entity="Group" />
+		<reference package-path="com.liferay.portal" entity="Role" />
+		<reference package-path="com.liferay.portal" entity="UserGroupRole" />
+		<reference package-path="com.liferay.portal" entity="Company" />
+		<reference package-path="com.liferay.portal" entity="UserNotificationEvent" />
+		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLFileEntry" />
+		<reference package-path="com.liferay.portlet.documentlibrary" entity="DLFileVersion" />
 	</entity>
-	
+
+
 	<exceptions>
 		<exception>QuotaExceeded</exception>
 	</exceptions>
