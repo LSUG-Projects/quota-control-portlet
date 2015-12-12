@@ -20,6 +20,7 @@
 String cmd = ParamUtil.getString(request, Constants.CMD, Constants.EDIT);
 
 String redirect = ParamUtil.getString(request, "redirect");
+String uploadExceptionRedirect = ParamUtil.getString(request, "uploadExceptionRedirect", currentURL);
 
 String referringPortletResource = ParamUtil.getString(request, "referringPortletResource");
 
@@ -168,41 +169,36 @@ if ((checkedOut || pending) && !PropsValues.DL_FILE_ENTRY_DRAFTS_ENABLED) {
 	/>
 </c:if>
 
-<%
-PortletURL editFileEntryURL = renderResponse.createActionURL();
-
-editFileEntryURL.setParameter("struts_action", "/document_library/edit_file_entry");
-
-if (Validator.isNotNull(redirect)) {
-	editFileEntryURL.setParameter("redirect", redirect);
-}
-
-if (Validator.isNotNull(referringPortletResource)) {
-	editFileEntryURL.setParameter("referringPortletResource", referringPortletResource);
-}
-
-if (repositoryId > 0) {
-	editFileEntryURL.setParameter("repositoryId", String.valueOf(repositoryId));
-}
-
-if (folderId > 0) {
-	editFileEntryURL.setParameter("folderId", String.valueOf(folderId));
-}
-
-if (fileEntryId > 0) {
-	editFileEntryURL.setParameter("fileEntryId", String.valueOf(fileEntryId));
-}
-
-editFileEntryURL.setParameter("workflowAction", String.valueOf(WorkflowConstants.ACTION_PUBLISH));
-%>
+<liferay-portlet:actionURL varImpl="editFileEntryURL">
+	<liferay-portlet:param name="struts_action" value="/document_library/edit_file_entry" />
+	<liferay-portlet:param name="uploadExceptionRedirect" value="<%= uploadExceptionRedirect %>" />
+</liferay-portlet:actionURL>
 
 <aui:form action="<%= editFileEntryURL %>" cssClass="lfr-dynamic-form" enctype="multipart/form-data" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveFileEntry(" + saveAsDraft + ");" %>'>
 	<aui:input name="<%= Constants.CMD %>" type="hidden" />
+	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+	<aui:input name="referringPortletResource" type="hidden" value="<%= referringPortletResource %>" />
 	<aui:input name="uploadProgressId" type="hidden" value="<%= uploadProgressId %>" />
+	<aui:input name="repositoryId" type="hidden" value="<%= repositoryId %>" />
 	<aui:input name="folderId" type="hidden" value="<%= folderId %>" />
+	<aui:input name="fileEntryId" type="hidden" value="<%= fileEntryId %>" />
+	<aui:input name="workflowAction" type="hidden" value="<%= String.valueOf(WorkflowConstants.ACTION_PUBLISH) %>" />
+
+	<liferay-ui:error exception="<%= AntivirusScannerException.class %>">
+
+		<%
+		AntivirusScannerException ase = (AntivirusScannerException)errorException;
+		%>
+
+		<liferay-ui:message key="<%= ase.getMessageKey() %>" />
+	</liferay-ui:error>
 
 	<liferay-ui:error exception="<%= DuplicateFileException.class %>" message="please-enter-a-unique-document-name" />
 	<liferay-ui:error exception="<%= DuplicateFolderNameException.class %>" message="please-enter-a-unique-document-name" />
+
+	<liferay-ui:error exception="<%= LiferayFileItemException.class %>">
+		<liferay-ui:message arguments="<%= TextFormatter.formatStorageSize(LiferayFileItem.THRESHOLD_SIZE, locale) %>" key="please-enter-valid-content-with-valid-content-size-no-larger-than-x" translateArguments="<%= false %>" />
+	</liferay-ui:error>
 
 	<liferay-ui:error exception="<%= FileExtensionException.class %>">
 		<liferay-ui:message key="document-names-must-end-with-one-of-the-following-extensions" /> <%= StringUtil.merge(PrefsPropsUtil.getStringArray(PropsKeys.DL_FILE_EXTENSIONS, StringPool.COMMA), StringPool.COMMA_AND_SPACE) %>.
@@ -270,55 +266,57 @@ editFileEntryURL.setParameter("workflowAction", String.valueOf(WorkflowConstants
 		}
 		%>
 
-		<aui:field-wrapper label="folder">
-			<div class="input-append">
-				<liferay-ui:input-resource id="folderName" url="<%= folderName %>" />
+		<div class="control-group">
+			<aui:input label="folder" name="folderName" type="resource" value="<%= folderName %>" />
 
-				<c:if test="<%= referringPortletResourceRootPortletId.equals(PortletKeys.ASSET_PUBLISHER) && (fileEntryId == 0) %>">
-					<aui:button name="selectFolderButton" value="select" />
+			<c:if test="<%= referringPortletResourceRootPortletId.equals(PortletKeys.ASSET_PUBLISHER) && (fileEntryId == 0) %>">
+				<aui:button name="selectFolderButton" value="select" />
 
-					<%
-					String taglibRemoveFolder = "Liferay.Util.removeFolderSelection('folderId', 'folderName', '" + renderResponse.getNamespace() + "');";
-					%>
+				<%
+				String taglibRemoveFolder = "Liferay.Util.removeFolderSelection('folderId', 'folderName', '" + renderResponse.getNamespace() + "');";
+				%>
 
-					<aui:button disabled="<%= folderId <= 0 %>" name="removeFolderButton" onClick="<%= taglibRemoveFolder %>" value="remove" />
+				<aui:button disabled="<%= folderId <= 0 %>" name="removeFolderButton" onClick="<%= taglibRemoveFolder %>" value="remove" />
 
-					<liferay-portlet:renderURL var="selectFolderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-						<portlet:param name="struts_action" value='<%= "/document_library/select_folder" %>' />
-					</liferay-portlet:renderURL>
+				<liferay-portlet:renderURL var="selectFolderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+					<portlet:param name="struts_action" value='<%= "/document_library/select_folder" %>' />
+				</liferay-portlet:renderURL>
 
-					<aui:script use="aui-base">
-						A.one('#<portlet:namespace />selectFolderButton').on(
-							'click',
-							function(event) {
-								Liferay.Util.selectEntity(
-									{
-										dialog: {
-											constrain: true,
-											modal: true,
-											width: 680
-										},
-										id: '<portlet:namespace />selectFolder',
-										title: '<liferay-ui:message arguments="folder" key="select-x" />',
-										uri: '<%= selectFolderURL.toString() %>'
+				<aui:script use="aui-base">
+					A.one('#<portlet:namespace />selectFolderButton').on(
+						'click',
+						function(event) {
+							Liferay.Util.selectEntity(
+								{
+									dialog: {
+										constrain: true,
+										modal: true,
+										width: 680
 									},
-									function(event) {
-										var folderData = {
-											idString: 'folderId',
-											idValue: event.folderid,
-											nameString: 'folderName',
-											nameValue: event.foldername
-										};
+									id: '<portlet:namespace />selectFolder',
+									title: '<liferay-ui:message arguments="folder" key="select-x" />',
+									uri: '<%= selectFolderURL.toString() %>'
+								},
+								function(event) {
+									var folderData = {
+										idString: 'folderId',
+										idValue: event.folderid,
+										nameString: 'folderName',
+										nameValue: event.foldername
+									};
 
-										Liferay.Util.selectFolder(folderData, '<portlet:namespace />');
-									}
-								);
-							}
-						);
-					</aui:script>
-				</c:if>
-			</div>
-		</aui:field-wrapper>
+									Liferay.Util.selectFolder(folderData, '<portlet:namespace />');
+								}
+							);
+						}
+					);
+				</aui:script>
+			</c:if>
+		</div>
+
+		<div class="alert alert-error hide" id="<portlet:namespace />fileTitleError">
+			<liferay-ui:message key="you-must-specify-a-file-or-a-title" />
+		</div>
 
 		<aui:input autoFocus="<%= windowState.equals(WindowState.MAXIMIZED) %>" name="file" onChange='<%= renderResponse.getNamespace() + "validateTitle();" %>' style="width: auto;" type="file">
 			<aui:validator name="acceptFiles">
@@ -326,13 +324,7 @@ editFileEntryURL.setParameter("workflowAction", String.valueOf(WorkflowConstants
 			</aui:validator>
 		</aui:input>
 
-		<aui:input name="title">
-			<aui:validator errorMessage="you-must-specify-a-file-or-a-title" name="custom">
-				function(val, fieldNode, ruleValue) {
-					return ((val != '') || A.one('#<portlet:namespace />file').val() != '');
-				}
-			</aui:validator>
-		</aui:input>
+		<aui:input name="title" />
 
 		<c:if test="<%= ((folder == null) || folder.isSupportsMetadata()) %>">
 			<aui:input name="description" />
@@ -340,15 +332,7 @@ editFileEntryURL.setParameter("workflowAction", String.valueOf(WorkflowConstants
 			<c:if test="<%= (folder == null) || (folder.getModel() instanceof DLFolder) %>">
 
 				<%
-				boolean inherited = false;
-
-				if (folder != null) {
-					DLFolder dlFolder = (DLFolder)folder.getModel();
-
-					inherited = !dlFolder.isOverrideFileEntryTypes();
-				}
-
-				List<DLFileEntryType> dlFileEntryTypes = DLFileEntryTypeLocalServiceUtil.getFolderFileEntryTypes(PortalUtil.getSiteAndCompanyGroupIds(themeDisplay), folderId, inherited);
+				List<DLFileEntryType> dlFileEntryTypes = DLFileEntryTypeLocalServiceUtil.getFolderFileEntryTypes(PortalUtil.getSiteAndCompanyGroupIds(themeDisplay), folderId, true);
 				%>
 
 				<c:choose>
@@ -539,23 +523,38 @@ editFileEntryURL.setParameter("workflowAction", String.valueOf(WorkflowConstants
 	}
 
 	function <portlet:namespace />saveFileEntry(draft) {
-		<%= HtmlUtil.escape(uploadProgressId) %>.startProgress();
+		var className = 'alert alert-danger';
 
-		if (!draft) {
-			document.<portlet:namespace />fm.action = "<%= editFileEntryURL.toString() %>";
+		var fileTitleErrorNode = document.getElementById('<portlet:namespace />fileTitleError');
+
+		var form = document.<portlet:namespace />fm;
+
+		if (form && fileTitleErrorNode) {
+			fileTitleErrorNode.className = className + ' hide';
+
+			var fileValue = form.<portlet:namespace />file.value;
+
+			var hasFieldValue = !!(fileValue || form.<portlet:namespace />title.value);
+
+			if (hasFieldValue) {
+				if (fileValue) {
+					<%= HtmlUtil.escape(uploadProgressId) %>.startProgress();
+				}
+
+				form.<portlet:namespace /><%= Constants.CMD %>.value = '<%= (fileEntry == null) ? Constants.ADD : Constants.UPDATE %>';
+
+				if (draft) {
+					form.<portlet:namespace />workflowAction.value = '<%= WorkflowConstants.ACTION_SAVE_DRAFT %>';
+				}
+
+				submitForm(form);
+			}
+			else {
+				fileTitleErrorNode.className = className + ' show';
+
+				window.location.hash = '<portlet:namespace />fileTitleError';
+			}
 		}
-		else {
-
-			<%
-			editFileEntryURL.setParameter("workflowAction", String.valueOf(WorkflowConstants.ACTION_SAVE_DRAFT));
-			%>
-
-			document.<portlet:namespace />fm.action = "<%= editFileEntryURL.toString() %>";
-		}
-
-		document.<portlet:namespace />fm.<portlet:namespace /><%= Constants.CMD %>.value = "<%= (fileEntry == null) ? Constants.ADD : Constants.UPDATE %>";
-
-		submitForm(document.<portlet:namespace />fm);
 	}
 
 	function <portlet:namespace />validateTitle() {
