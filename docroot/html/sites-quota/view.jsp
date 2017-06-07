@@ -32,9 +32,9 @@
 	modelVar="quota" escapedModel="<%= true %>">
 
 	<liferay-ui:search-container-column-text name="site-name">
-
-		<%= GroupLocalServiceUtil.getGroup(quota.getClassPK()).getDescriptiveName(locale) %>
-
+		<a target="_blank" href="/group/control_panel?doAsGroupId=${quota.getClassPK()}&p_p_id=156">
+			<%= GroupLocalServiceUtil.getGroup(quota.getClassPK()).getDescriptiveName(locale) %>
+		</a>
 	</liferay-ui:search-container-column-text>
 
 	<liferay-ui:search-container-column-text name="quota-enabled">

@@ -104,7 +104,10 @@ public class QuotaStartupAction extends SimpleAction {
 	
 					if (quota == null) {
 						long quotaUsed = QuotaLocalServiceUtil.calculateSiteUsedQuota(classPK);
-						QuotaLocalServiceUtil.addQuota(companyId, classNameId, classPK, 0, 0, quotaUsed, Constants.QUOTA_INACTIVE);
+						
+						QuotaLocalServiceUtil.createDefaultQuota(companyId, classNameId, group.getClassPK());
+						QuotaLocalServiceUtil.decrementQuota(classNameId, group.getClassPK(), quotaUsed);
+						
 						sitesQuotaAdded++;
 					}
 					

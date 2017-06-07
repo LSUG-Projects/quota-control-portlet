@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
+import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Company;
@@ -31,6 +32,7 @@ import com.liferay.portal.model.Role;
 import com.liferay.portal.model.UserGroupRole;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
+import com.liferay.portal.service.persistence.PortalPreferencesUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFileVersion;
 import com.liferay.util.portlet.PortletProps;
@@ -82,6 +84,10 @@ public class QuotaLocalServiceImpl extends QuotaLocalServiceBaseImpl {
 			long quotaAssigned = 0;
 			long quotaUsed = 0;
 			int quotaStatus = 0;
+			
+			if ( PropsUtil.get("lsug.quota.portlet.default.alert")!=null ) if ( !PropsUtil.get("lsug.quota.portlet.default.alert").equals("") ) quotaAlert=Integer.parseInt( PropsUtil.get("lsug.quota.portlet.default.alert") );
+			if ( PropsUtil.get("lsug.quota.portlet.default.assigned")!=null ) if ( !PropsUtil.get("lsug.quota.portlet.default.assigned").equals("") ) quotaAssigned=Integer.parseInt( PropsUtil.get("lsug.quota.portlet.default.assigned") );
+			if ( PropsUtil.get("lsug.quota.portlet.default.status")!=null ) if ( !PropsUtil.get("lsug.quota.portlet.default.status").equals("") ) quotaStatus=Integer.parseInt( PropsUtil.get("lsug.quota.portlet.default.status") );		
 
 			quota = quotaLocalService.addQuota(companyId, classNameId, classPK, quotaAlert,
 				quotaAssigned, quotaUsed, quotaStatus);
