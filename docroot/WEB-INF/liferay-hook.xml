@@ -30,4 +30,8 @@
 	    <struts-action-path>/document_library/upload_multiple_file_entries</struts-action-path>
 	    <struts-action-impl>org.lsug.quota.QuotaEditFileEntryAction</struts-action-impl>
 	</struts-action>
+	<struts-action>
+	    <struts-action-path>/document_library/view_file_entry</struts-action-path>
+	    <struts-action-impl>org.lsug.quota.QuotaEditFileEntryAction</struts-action-impl>
+	</struts-action>
 </hook>

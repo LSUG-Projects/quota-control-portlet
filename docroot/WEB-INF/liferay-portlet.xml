@@ -7,7 +7,7 @@
 		<icon>/html/server-quota/icon.png</icon>
 		<user-notification-definitions>/org/lsug/quota/portlet/notification/quota-server-user-notification-definition.xml</user-notification-definitions>
 		<user-notification-handler-class>org.lsug.quota.portlet.notification.QuotaServerNotificationHandler</user-notification-handler-class>
-		<control-panel-entry-category>server</control-panel-entry-category>
+		<control-panel-entry-category>configuration</control-panel-entry-category>
 		<control-panel-entry-weight>2.5</control-panel-entry-weight>
 		<instanceable>false</instanceable>
 		<requires-namespaced-parameters>false</requires-namespaced-parameters>

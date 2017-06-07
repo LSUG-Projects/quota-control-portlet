@@ -54,7 +54,7 @@ public class QuotaServerNotificationHandler extends BaseUserNotificationHandler 
 		String body = jsonObject.getString("body");
 		String webId = CompanyLocalServiceUtil.getCompany(classPK).getWebId();
 
-		String title = QuotaUtil.getResource(serviceContext.getLiferayPortletRequest(),
+		String title = QuotaUtil.getResource(serviceContext.getLocale(),
 			"quota-from-instance-x-above-the-alert", HtmlUtil.escape(webId));
 
 		return StringUtil.replace(
