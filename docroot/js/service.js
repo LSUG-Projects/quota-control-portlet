@@ -1,1 +1,0 @@
-Liferay.Service.register("Liferay.Service.LSUGQUOTA", "org.lsug.quota.service", "quota-control-portlet");

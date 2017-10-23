@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean class="org.lsug.quota.service.impl.QuotaLocalServiceImpl" id="org.lsug.quota.service.QuotaLocalService" />
+	<bean class="org.lsug.quota.service.impl.QuotaServiceImpl" id="org.lsug.quota.service.QuotaService" />
+	<bean class="org.lsug.quota.service.persistence.impl.QuotaPersistenceImpl" id="org.lsug.quota.service.persistence.QuotaPersistence" parent="basePersistence" />
+</beans>

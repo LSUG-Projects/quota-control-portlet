@@ -1,0 +1,4 @@
+Bundle-Name: quota-control-fragment
+Bundle-SymbolicName: org.lsug.quota.fragment
+Bundle-Version: 1.0.0
+Fragment-Host: com.liferay.document.library.web;bundle-version="1.3.16"

@@ -1,0 +1,13 @@
+Bundle-Name: quota-control-api
+Bundle-SymbolicName: org.lsug.quota.api
+Bundle-Version: 1.0.0
+Export-Package: \
+	org.lsug.quota.configuration,\
+	org.lsug.quota.exception,\
+	org.lsug.quota.model,\
+	org.lsug.quota.service,\
+	org.lsug.quota.service.persistence,\
+	org.lsug.quota.util.comparator,\
+	org.lsug.quota.util
+-includeresource: META-INF/service.xml=../quota-control-service/service.xml
+-metatype: *

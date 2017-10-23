@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 7.0.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_7_0_0.dtd">
+
+<service-builder package-path="org.lsug.quota">
+  <namespace>LSUGQUOTA</namespace>
+  <entity name="Quota" local-service="true">
+    <!-- Primary keys -->
+    <column name="quotaId" type="long" primary="true" />
+    <column name="companyId" type="long" />
+    <column name="classNameId" type="long" />
+    <column name="classPK" type="long" />
+    <!-- Maximum quota (in MB) -->
+    <column name="quotaAssigned" type="long" />
+    <!-- Amount used (in MB) -->
+    <column name="quotaUsed" type="long" />
+    <!--
+			A quota is either "enabled" (QuotaStatus.ENABLED) or
+			"disabled" (QuotaStatus.DISABLED)
+		-->
+    <column name="quotaStatus" type="int" />
+    <!--
+			When reaching this percentage, the user (the particular user
+			depends on the type of quota) will receive a notification
+		-->
+    <column name="quotaAlert" type="int" />
+    <finder return-type="Quota" name="CN_CP">
+      <finder-column name="classNameId" />
+      <finder-column name="classPK" />
+    </finder>
+    <finder return-type="Collection" name="CN">
+      <finder-column name="classNameId" arrayable-operator="OR" />
+    </finder>
+    <finder return-type="Collection" name="C_CN">
+      <finder-column name="companyId" />
+      <finder-column name="classNameId" arrayable-operator="OR" />
+    </finder>
+    <reference package-path="com.liferay.portal" entity="Group" />
+    <reference package-path="com.liferay.portal" entity="Role" />
+    <reference package-path="com.liferay.portal" entity="UserGroupRole" />
+    <reference package-path="com.liferay.portal" entity="Company" />
+    <reference package-path="com.liferay.portal" entity="UserNotificationEvent" />
+    <reference package-path="com.liferay.portlet.documentlibrary" entity="DLFileEntry" />
+    <reference package-path="com.liferay.portlet.documentlibrary" entity="DLFileVersion" />
+  </entity>
+  <exceptions>
+    <exception>QuotaExceeded</exception>
+  </exceptions>
+</service-builder>
+
